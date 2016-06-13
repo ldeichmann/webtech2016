@@ -1,5 +1,5 @@
 {
-  "name":"Level 1",
+  "name":"Level 1 Infinite",
   "speed":5,
   "spawn":{
     "type":"Spawn",
@@ -26,26 +26,17 @@
     },
 
     {
-      "type":"Ground",
+      "type":"SpikesTop",
       "pos_x":600,
       "pos_y":140,
-      "size_x":280,
+      "size_x":240,
       "size_y":20
     },
 
     {
       "type":"Coin",
       "pos_x":640,
-      "pos_y":180,
-      "size_x":20,
-      "size_y":20,
-      "value":1000
-    },
-
-    {
-      "type":"Coin",
-      "pos_x":640,
-      "pos_y":60,
+      "pos_y":80,
       "size_x":20,
       "size_y":20,
       "value":1000
@@ -54,16 +45,7 @@
     {
       "type":"Coin",
       "pos_x":680,
-      "pos_y":60,
-      "size_x":20,
-      "size_y":20,
-      "value":1000
-    },
-
-    {
-      "type":"Coin",
-      "pos_x":720,
-      "pos_y":60,
+      "pos_y":80,
       "size_x":20,
       "size_y":20,
       "value":1000
@@ -73,15 +55,23 @@
       "type":"Ground",
       "pos_x":900,
       "pos_y":30,
-      "size_x":280,
+      "size_x":240,
       "size_y":20
     },
 
     {
-      "type":"Ground",
-      "pos_x":1200,
+      "type":"Cobble",
+      "pos_x":1160,
+      "pos_y":0,
+      "size_x":60,
+      "size_y":150
+    },
+
+    {
+      "type":"SpikesBottom",
+      "pos_x":1230,
       "pos_y":30,
-      "size_x":280,
+      "size_x":210,
       "size_y":20
     },
 
@@ -117,10 +107,19 @@
     },
 
     {
+      "type":"Coin",
+      "pos_x":1540,
+      "pos_y":80,
+      "size_x":20,
+      "size_y":20,
+      "value":1000
+    },
+
+    {
       "type":"Ground",
       "pos_x":1500,
       "pos_y":30,
-      "size_x":280,
+      "size_x":120,
       "size_y":20
     },
 
@@ -128,8 +127,17 @@
       "type":"Ground",
       "pos_x":1800,
       "pos_y":30,
-      "size_x":280,
+      "size_x":120,
       "size_y":20
+    },
+
+    {
+      "type":"Coin",
+      "pos_x":1860,
+      "pos_y":80,
+      "size_x":20,
+      "size_y":20,
+      "value":1000
     },
 
     {
@@ -141,10 +149,35 @@
     },
 
     {
+      "type":"Cobble",
+      "pos_x":2100,
+      "pos_y":120,
+      "size_x":280,
+      "size_y":80
+    },
+
+    {
+      "type":"Coin",
+      "pos_x":2200,
+      "pos_y":80,
+      "size_x":20,
+      "size_y":20,
+      "value":1000
+    },
+
+    {
       "type":"Ground",
       "pos_x":2400,
       "pos_y":30,
       "size_x":280,
+      "size_y":20
+    },
+
+    {
+      "type":"SpikesTop",
+      "pos_x":2420,
+      "pos_y":120,
+      "size_x":208,
       "size_y":20
     },
 
@@ -181,11 +214,19 @@
     },
 
     {
-      "type":"Finish",
-      "pos_x":3375,
-      "pos_y":50,
-      "size_x":40,
-      "size_y":250
+      "type": "TeleportSpeed",
+      "pos_x": 3375,
+      "pos_y": 50,
+      "size_x": 40,
+      "size_y": 250,
+      "speedIncrease": 1,
+      "target": {
+        "type": "Spawn",
+        "pos_x": 100,
+        "pos_y": 60,
+        "size_x": 1,
+        "size_y": 1
+      }
     }
 
   ]

@@ -24,7 +24,7 @@
       "size_y": 20
     },
     {
-      "type": "Ground",
+      "type": "Wall",
       "pos_x": 380,
       "pos_y": 125,
       "size_x": 50,
@@ -88,13 +88,15 @@
       "pos_y":30,
       "size_x":5,
       "size_y":500,
-      "bullet": {
-        "type":"Bullet",
-        "pos_x":1100,
-        "pos_y":60,
-        "size_x":10,
-        "size_y":10
-      }
+      "bullets": [
+        {
+          "type":"Bullet",
+          "pos_x":1100,
+          "pos_y":60,
+          "size_x":16,
+          "size_y":8
+        }
+      ]
     },
     {
       "type": "Ground",
@@ -130,13 +132,15 @@
     "pos_y":30,
     "size_x":5,
     "size_y":300,
-      "bullet": {
-        "type":"Bullet",
-        "pos_x":1910,
-        "pos_y":100,
-        "size_x":10,
-        "size_y":10
-      }
+      "bullets": [
+        {
+          "type":"Bullet",
+          "pos_x":1910,
+          "pos_y":100,
+          "size_x":16,
+          "size_y":8
+        }
+      ]
     },
     {
       "type": "Ground",
@@ -193,13 +197,15 @@
       "pos_y":50,
       "size_x":5,
       "size_y":300,
-      "bullet": {
-        "type":"Bullet",
-        "pos_x":4300,
-        "pos_y":130,
-        "size_x":30,
-        "size_y":25
-      }
+      "bullets": [
+        {
+          "type":"Bullet",
+          "pos_x":4300,
+          "pos_y":130,
+          "size_x":32,
+          "size_y":16
+        }
+      ]
     },
     {
       "type": "Ground",
@@ -232,10 +238,10 @@
     },
     {
       "type": "Finish",
-      "pos_x": 4800,
-      "pos_y": 50,
+      "pos_x": 4780,
+      "pos_y": 70,
       "size_x": 20,
-      "size_y": 100
+      "size_y": 280
     }
   ]
 }

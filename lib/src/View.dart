@@ -3,21 +3,22 @@ part of runner;
 class View {
 
 
-  // game containers
+  /// game containers
   DivElement container;
   DivElement gameElement;
 
   /// Restart overlay container
   DivElement restartOverlay;
+  DivElement restartMessage;
 
   /// Restart clickables container
-  DivElement restartButtons;
-  DivElement restart;
-  DivElement restartMenu;
-  DivElement restartSubmitHighscore;
+  DivElement restartContainer;
+  DivElement restartButtonRestart;
+  DivElement restartButtonSubmit;
+  DivElement restartButtonMenu;
 
   /// Restart highscore list container
-  DivElement restartHighscores;
+  DivElement restartHighscoreContainer;
   UListElement restartHighscoreList;
 
   /// Restart login container
@@ -29,15 +30,17 @@ class View {
 
   /// Main menu overlay container
   DivElement menuOverlay;
-  DivElement title;
-  DivElement menuButtons;
-  DivElement menu;
+  DivElement menuTitle;
+
+  /// Menu clickables container
+  DivElement menuContainer;
+  DivElement menuButtonStart;
   SelectElement menuLevelSelect;
-  DivElement menuLimiter;
+  DivElement menuButtonLimiter;
+  DivElement menuButtonQuality;
 
   /// Score Element
   DivElement score;
-  DivElement message;
   DivElement statusMessage;
 
   /// Game Size
@@ -52,6 +55,10 @@ class View {
 
   /// Map of used divs by id
   Map<int, DivElement> usedDivs;
+
+  /// Map for current quality class settings
+  Map<String, String> qualityClass;
+
 
   /// Creates View instance
   ///
@@ -68,15 +75,17 @@ class View {
       divs[i] = new DivElement();
     }
 
+
+
     this.usedDivs = new Map<int, DivElement>();
+
+    this.qualityClass = new Map<String, String>();
 
     this.container = querySelector('#container');
 
-    this.gameElement = new DivElement();
-    this.gameElement.id = "game";
+    this.gameElement = querySelector('#game');
     this.gameElement.style.width  = "${this.viewport_x}px";
     this.gameElement.style.height = "${this.viewport_y}px";
-    this.container.children.add(this.gameElement);
 
     for (DivElement d in divs) {
       this.gameElement.children.add(d);
@@ -86,102 +95,75 @@ class View {
 
     this.player = new DivElement();
     this.player.id = "Player";
+    this.player.className = "Player block";
     this.player.style.display = "block";
     this.gameElement.children.add(this.player);
 
-    this.restartOverlay = new DivElement();
-    this.restartOverlay.id = "restart-overlay";
-    this.gameElement.children.add(this.restartOverlay);
 
-    this.restartButtons = new DivElement();
-    this.restartButtons.id = "restartButtons";
-    this.restartOverlay.children.add(this.restartButtons);
+    this.restartOverlay = querySelector('#restart-overlay');
+    this.restartHighscoreContainer = querySelector('#restart-overlay-highscores');
+    this.restartHighscoreList = querySelector('#restart-overlay-highscores-list');
 
-    this.restartHighscores = new DivElement();
-    this.restartHighscores.id = "restartHighscores";
-    this.restartOverlay.children.add(this.restartHighscores);
+    this.restartContainer = querySelector('#restart-overlay-button-container');
+    this.restartButtonRestart = querySelector("#restart-overlay-button-restart");
+    this.restartButtonSubmit = querySelector('#restart-overlay-button-highscore');
+    this.restartButtonMenu = querySelector('#restart-overlay-button-menu');
 
-    this.restartHighscoreList = new UListElement();
-    this.restartHighscoreList.id = "restartHighscoreList";
-    this.restartHighscores.children.add(this.restartHighscoreList);
 
-    this.restartLogin = new DivElement();
-    this.restartLogin.id = "restartLogin";
-    this.restartOverlay.children.add(this.restartLogin);
+    this.restartLogin = querySelector('#restart-overlay-login');
+    this.restartLoginUser = querySelector("#restart-overlay-login-user");
+    this.restartLoginPassword = querySelector("#restart-overlay-login-password");
+    this.restartLoginSubmit = querySelector("#restart-overlay-login-submit");
 
-    this.restartLoginUser = new InputElement();
-    this.restartLoginUser.id = "restartLoginUser";
-    this.restartLoginUser.placeholder = "Username";
-    this.restartLogin.children.add(this.restartLoginUser);
+    this.restartMessage = querySelector('#restart-overlay-message');
 
-    this.restartLoginPassword = new InputElement();
-    this.restartLoginPassword.id = "restartLoginPassword";
-    this.restartLoginPassword.type = "password";
-    this.restartLoginPassword.placeholder = "Password";
-    this.restartLogin.children.add(this.restartLoginPassword);
+    this.score = querySelector("#score");
 
-    this.restartLoginSubmit = new DivElement();
-    this.restartLoginSubmit.id = "restartLoginSubmit";
+    this.statusMessage = querySelector('#status-message');
+
+    this.menuOverlay = querySelector("#menu-overlay");
+    this.menuTitle = querySelector("#menu-overlay-title");
+
+    this.menuContainer = querySelector("#menu-overlay-button-container");
+    this.menuButtonStart = querySelector("#menu-overlay-button-start");
+    this.menuLevelSelect = querySelector("#menu-overlay-level-select");
+    this.menuButtonLimiter = querySelector("#menu-overlay-button-limiter");
+    this.menuButtonQuality = querySelector("#menu-overlay-button-quality");
+
+    this.menuButtonStart.text = "Start";
+    this.menuButtonLimiter.text = "30fps - ✕";
+    this.menuButtonQuality.text = "Quality: Bad";
+
+    this.restartButtonRestart.text = "Restart";
+    this.restartButtonSubmit.text = "Submit Highscore";
+    this.restartButtonMenu.text = "Return to Menu";
     this.restartLoginSubmit.text = "Submit";
-    this.restartLogin.children.add(this.restartLoginSubmit);
 
-    this.restart = new DivElement();
-    this.restart.id = "restart";
-    this.restart.text = "Restart Level";
-    this.restartButtons.children.add(this.restart);
+    this.preloadImages();
 
-    this.restartSubmitHighscore = new DivElement();
-    this.restartSubmitHighscore.id = "restartHighscore";
-    this.restartSubmitHighscore.text = "Submit Highscore";
-    this.restartButtons.children.add(this.restartSubmitHighscore);
+  }
 
-    this.restartMenu = new DivElement();
-    this.restartMenu.id = "restartMenu";
-    this.restartMenu.text = "Return to menu";
-    this.restartButtons.children.add(this.restartMenu);
+  /// Preloads textures to avoid pop-in
+  void preloadImages() {
+    List<String> classList = ["Bullet", "Cobble", "Coin", "Finish", "Ground", "Guy", "SpikesBottom", "SpikesTop", "Wall"];
 
-    this.message = new DivElement();
-    this.message.id = "message";
-    this.message.text = "";
-    this.restartOverlay.children.add(this.message);
+    for (int i = 0; i < classList.length; i++) {
+      divs[i].className = classList[i];
+      // show element for just a moment, thanks firefox...
+      divs[i].style.display = "block";
+      divs[i].style.display = "none";
+    }
 
-    this.score = new DivElement();
-    this.score.id = "score";
-    this.score.text = "Score: 0";
-    this.gameElement.children.add(this.score);
+  }
 
-    this.statusMessage = new DivElement();
-    this.statusMessage.id = "statusMessage";
-    this.statusMessage.text = "";
-    this.gameElement.children.add(this.statusMessage);
 
-    this.menuOverlay = new DivElement();
-    this.menuOverlay.id = "menu-overlay";
-    this.gameElement.children.add(this.menuOverlay);
-
-    this.title = new DivElement();
-    this.title.id = "title";
-    this.title.text = "'Til Death";
-    this.menuOverlay.children.add(this.title);
-
-    this.menuButtons = new DivElement();
-    this.menuButtons.id = "restartButtons";
-    this.menuOverlay.children.add(this.menuButtons);
-
-    this.menu = new DivElement();
-    this.menu.id = "menuStart";
-    this.menu.text = "Start";
-    this.menuButtons.children.add(this.menu);
-
-    this.menuLevelSelect = new SelectElement();
-    this.menuLevelSelect.id = "menuLevelSelect";
-    this.menuButtons.children.add(this.menuLevelSelect);
-
-    this.menuLimiter = new DivElement();
-    this.menuLimiter.id = "menuLimiter";
-    this.menuLimiter.text = "30fps - ✕";
-    this.menuButtons.children.add(this.menuLimiter);
-
+  /// Scales View based on window size
+  void rescale(int x, int y) {
+    double scale;
+    int vx = this.viewport_x + 10; // add border for calculation
+    int vy = this.viewport_y + 10;
+    scale = (x/vx) < (y/vy) ? (x/vx) : y/vy;
+    document.body.style.transform = "scale(${scale})";
   }
 
   /// Updates the View based on [Model]
@@ -199,39 +181,110 @@ class View {
     }
   }
 
-  void drawBlocks(Model m) {
-    for (int i = 0; i < m.visibleBlocks.length; i++) {
-      Block b = m.visibleBlocks[i];
+  void drawBlocks(Model model) {
+    for (int i = 0; i < model.visibleBlocks.length; i++) {
+      Block b = model.visibleBlocks[i];
       DivElement d = this.divs[i];
       if (b == null && d.style.display != "none") {
         d.style.display = "none";
         d.dataset["id"] = "none";
       } else if (b != null && ( (d.style.display == "none") || (d.dataset["id"] != b.id.toString()) )) {
         d.style.display = "block";
-        d.className = b.name;
+        d.className = this.qualityClass[b.name];
         d.dataset["id"] = b.id.toString();
+        if (b.name == "Message") {
+          d.text = (b as Message).message;
+        } else {
+          d.text = "";
+        }
 
         d.style.width = "${b.size_x}px";
         d.style.height = "${b.size_y}px";
 
-        d.style.left = "${b.pos_x  - m.player.pos_x + Player.player_offset}px";
+        d.style.left = "${b.pos_x  - model.player.pos_x + Player.player_offset}px";
         d.style.bottom = "${b.pos_y}px";
       } else if (b != null) {
-        d.style.left = "${b.pos_x  - m.player.pos_x + Player.player_offset}px";
+        d.style.left = "${b.pos_x  - model.player.pos_x + Player.player_offset}px";
         d.style.bottom = "${b.pos_y}px";
       }
     }
   }
 
   /// Draws list of visible Blocks on screen
-  void updateGame(Model m) {
+  void updateGame(Model model) {
 
-    this.drawBlocks(m);
+    this.drawBlocks(model);
 
-    this.player.style.bottom = "${m.player.pos_y}px";
+    this.player.style.bottom = "${model.player.pos_y}px";
 
-    this.score.text = "Score: ${m.score}";
+    this.score.text = "Score: ${model.score}";
 
+  }
+
+  /// Updates visual quality
+  void updateQuality(Quality quality) {
+    switch (quality) {
+      case Quality.HIGH:
+        this.player.className = "Player block";
+        this.qualityClass["Bullet"] = "Bullet block";
+        this.qualityClass["Cobble"] = "Cobble block";
+        this.qualityClass["Coin"] = "Coin block";
+        this.qualityClass["Finish"] = "Finish block";
+        this.qualityClass["Ground"] = "Ground block";
+        this.qualityClass["Message"] = "Message block";
+        this.qualityClass["SpikesBottom"] = "SpikesBottom block";
+        this.qualityClass["SpikesTop"] = "SpikesTop block";
+        this.qualityClass["Teleport"] = "Teleport block";
+        this.qualityClass["Trigger"] = "Trigger block-low";
+        this.qualityClass["Wall"] = "Wall block";
+        this.qualityClass["Water"] = "Water block";
+
+        this.menuButtonQuality.text = "Quality: High";
+        break;
+      case Quality.MEDIUM:
+        this.player.className = "Player-low block-med";
+        this.qualityClass["Bullet"] = "Bullet-low block-med";
+        this.qualityClass["Cobble"] = "Cobble-low block-med";
+        this.qualityClass["Coin"] = "Coin-low block-med";
+        this.qualityClass["Finish"] = "Finish-low block-med";
+        this.qualityClass["Ground"] = "Ground-low block-med";
+        this.qualityClass["Message"] = "Message block";
+        this.qualityClass["SpeedBlock"] = "Trigger block-med";
+        this.qualityClass["SpikesBottom"] = "SpikesBottom-low block-med";
+        this.qualityClass["SpikesTop"] = "SpikesTop-low block-med";
+        this.qualityClass["Teleport"] = "Teleport-low block-med";
+        this.qualityClass["Trigger"] = "Trigger block-med";
+        this.qualityClass["Wall"] = "Wall-low block-med";
+        this.qualityClass["Water"] = "Water-low block-med";
+
+        this.menuButtonQuality.text = "Quality: Medium";
+        break;
+      case Quality.LOW:
+        this.player.className = "Player-low block-low";
+        this.qualityClass["Bullet"] = "Bullet-low block-low";
+        this.qualityClass["Cobble"] = "Cobble-low block-low";
+        this.qualityClass["Coin"] = "Coin-low block-low";
+        this.qualityClass["Finish"] = "Finish-low block-low";
+        this.qualityClass["Ground"] = "Ground-low block-low";
+        this.qualityClass["Message"] = "Message block";
+        this.qualityClass["SpikesBottom"] = "SpikesBottom-low block-low";
+        this.qualityClass["SpikesTop"] = "SpikesTop-low block-low";
+        this.qualityClass["Teleport"] = "Teleport-low block-low";
+        this.qualityClass["Trigger"] = "Trigger block-low";
+        this.qualityClass["Wall"] = "Wall-low block-low";
+        this.qualityClass["Water"] = "Water-low block-low";
+
+        this.menuButtonQuality.text = "Quality: Low";
+        break;
+    }
+  }
+
+  void updateLimiter(bool limited) {
+    if (!limited) {
+      this.menuButtonLimiter.text = "Framerate: 60fps";
+    } else {
+      this.menuButtonLimiter.text = "Framerate: 30fps";
+    }
   }
 
   /// Hides menus to display game
@@ -244,6 +297,8 @@ class View {
     this.player.style.height = "${m.player.size_y}px";
     this.player.style.width = "${m.player.size_x}px";
     this.player.style.left = "${Player.player_offset}px";
+
+    this.showHighscoreSubmit();
   }
 
   /// Displays the main menu
@@ -273,11 +328,11 @@ class View {
   }
 
   void hideHighscoreSubmit() {
-    this.restartSubmitHighscore.style.display = "none";
+    this.restartButtonSubmit.style.display = "none";
   }
 
   void showHighscoreSubmit() {
-    this.restartSubmitHighscore.style.display = "inline-block";
+    this.restartButtonSubmit.style.display = "inline-block";
   }
 
 
@@ -308,12 +363,10 @@ class View {
 
     this.hideHighscoreLogin();
 
-    this.showHighscoreSubmit();
-
     if (m.state == State.WON) {
-      this.message.text = "Well done";
+      this.restartMessage.text = "Well done";
     } else {
-      this.message.text = "You fail";
+      this.restartMessage.text = "You fail";
     }
 
     this.showHighscore(m);

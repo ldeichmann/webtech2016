@@ -1,5 +1,8 @@
 part of runner;
 
+enum Quality { LOW, MEDIUM, HIGH }
+
+
 // Controller
 class Game {
 
@@ -29,16 +32,13 @@ class Game {
   Timer gamekeyTrigger;
 
   bool limitFramerate;
+  Quality quality;
+
+  Storage localStorage;
 
   /// Creates Game instance
   /// Launches Main Menu
   Game() {
-    //TODO Why the fuck would this run twice and spawn two games?
-    //And WHY would this only happen when simulation a mobile device using chrome?!
-    //this is stupid
-    if (querySelector("#game") != null) {
-      return;
-    }
 
     try {
       // Download gamekey settings. Display warning on problems.
@@ -72,16 +72,32 @@ class Game {
     }
 
 
-    // instanciate model and view
+    // instantiate model and view
     this.model = new Model(viewport_x, viewport_y, speed);
     this.view = new View(viewport_x, viewport_y);
 
+
+    // get local storage
+    this.localStorage =  window.localStorage;
+
+    // get stored quality setting
+    this.quality = this.localStorage["quality"] == null ?
+    Quality.MEDIUM :
+    Quality.values[int.parse(this.localStorage["quality"])];
+
+    this.view.updateQuality(this.quality);
+
+    this.limitFramerate = this.localStorage["limit"] == "on" ? true : false;
+    this.view.updateLimiter(this.limitFramerate);
+
+    print(this.limitFramerate);
 
     // register keyboard input
     window.onKeyDown.listen((KeyboardEvent ev) async {
       switch (ev.keyCode) {
         case KeyCode.UP:    this.jump(); break;
         case KeyCode.SPACE: this.jump(); break;
+        case KeyCode.ESC:     this.restartGame(); break;
       }
     });
 
@@ -91,38 +107,72 @@ class Game {
       this.jump();
     });
 
+    window.onResize.listen((Event ev) {
+      this.resizeGame();
+    });
+
     // register click on restart button
-    this.view.restart.onClick.listen(
+    this.view.restartButtonRestart.onClick.listen(
         (event) => this.restartGame());
 
 
     // register click on return to main menu button
-    this.view.restartMenu.onClick.listen((event) => this.mainMenu());
+    this.view.restartButtonMenu.onClick.listen((event) => this.mainMenu());
 
     // register click on start button in main menu
-    this.view.menu.onClick.listen((event) {
+    this.view.menuButtonStart.onClick.listen((event) {
 
       String level = this.view.menuLevelSelect.selectedOptions[0].value;
       this.startGame(level);
 
     });
 
-    this.view.menuLimiter.onClick.listen((event) {
+    this.view.menuButtonLimiter.onClick.listen((event) {
       if (this.limitFramerate) {
-        this.view.menuLimiter.text = "30fps - ✕";
         this.limitFramerate = false;
+        this.localStorage["limit"] = "off";
       } else {
-        this.view.menuLimiter.text = "30fps - ✓";
         this.limitFramerate = true;
+        this.localStorage["limit"] = "on";
       }
+      this.view.updateLimiter(this.limitFramerate);
     });
 
+    this.view.menuButtonQuality.onClick.listen((event) {
+      switch (this.quality) {
+        case Quality.HIGH:
+          this.quality = Quality.LOW;
+          this.localStorage["quality"] = Quality.LOW.index.toString();
+          break;
+        case Quality.MEDIUM:
+          this.quality = Quality.HIGH;
+          this.localStorage["quality"] = Quality.HIGH.index.toString();
+          break;
+        case Quality.LOW:
+          this.quality = Quality.MEDIUM;
+          this.localStorage["quality"] = Quality.MEDIUM.index.toString();
+          break;
+
+      }
+      this.view.updateQuality(this.quality);
+    });
+
+
     // register click on submit highscore button
-    this.view.restartSubmitHighscore.onClick.listen((event) => this.showLogin());
+    this.view.restartButtonSubmit.onClick.listen((event) => this.showLogin());
 
     // register click on login button
     this.view.restartLoginSubmit.onClick.listen((event) => this.submitScore());
 
+    this.resizeGame();
+
+  }
+
+  void resizeGame() {
+    int win_x = window.innerWidth;
+    int win_y = window.innerHeight;
+
+    this.view.rescale(win_x, win_y);
   }
 
   /// Retrieves Level
@@ -175,7 +225,7 @@ class Game {
 
   /// Retrieves TOP 10 highscore from Gamekey service.
   ///
-  /// Returns List of up to 10 highscore entries. { 'name': STRING, 'score': INT }
+  /// Returns List of up to 10 highscore entries. { 'name': STRING, 'created': STRING, 'score': INT }
   /// Returns [] if gamekey service is not available.
   /// Returns [] if no highscores are present.
   Future<List<Map>> getHighscores() async {
@@ -186,14 +236,17 @@ class Game {
 
       levels = states.map((entry) => {
         'username' : "${entry['username']}",
+        'date' : "${entry['created']}",
         'scores' : entry['state']['scores']
       });
 
       scores = levels.where((entry) => (entry["scores"]["${this.model.currentLevelHash}"] != null)).map((entry) => {
         'name' : "${entry['username']}",
+        'date' : "${entry['date']}",
         'score' : entry["scores"]["${this.model.currentLevelHash}"]
       }).toList();
 
+      scores.sort((a, b) => DateTime.parse(a['date']).compareTo(DateTime.parse(b['date'])));
       scores.sort((a, b) => b['score'] - a['score']);
     } catch (error, stacktrace) {
       print("Game: getHighscores() Error: ${error}");
@@ -231,7 +284,7 @@ class Game {
         this.setHighscores();
         return;
       } else {
-        view.message.text = "Error";
+        view.statusMessage.text = "Error";
         return;
       }
     }
@@ -255,7 +308,7 @@ class Game {
         this.setHighscores();
         return;
       } else {
-        view.message.text = "Error";
+        view.statusMessage.text = "Error";
         return;
       }
     }
@@ -266,7 +319,7 @@ class Game {
     this.storeHighscore();
     this.view.hideHighscoreSubmit();
 
-    this.model.highscores =  await getHighscores();
+    this.model.highscores = await getHighscores();
     this.view.update(this.model); // update as soon as we have scores
   }
 
@@ -284,8 +337,17 @@ class Game {
   }
 
   /// Restarts the current level
-  void restartGame() {
-    startGame(this.model.currentLevelName);
+  ///
+  /// Very hacky way to restart the game
+  restartGame() async {
+    if (this.model.state != State.MENU) {
+      this.model.fail();
+      this.update(0);
+
+      // wait 10ms to make sure the Futures have completed...
+      await new Future.delayed(const Duration(milliseconds: 10), () => "1");
+      startGame(this.model.currentLevelName);
+    }
   }
 
   /// Starts the game.
