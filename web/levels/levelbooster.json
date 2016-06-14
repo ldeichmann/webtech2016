@@ -1,0 +1,41 @@
+{
+  "name":"Level 1",
+  "speed":5,
+  "boost":1,
+  "next":"level1.json",
+  "spawn":{
+    "type":"Spawn",
+    "pos_x":0,
+    "pos_y":50,
+    "size_x":1,
+    "size_y":1
+  },
+  "blocks":[
+    {
+      "type":"Ground",
+      "pos_x":0,
+      "pos_y":30,
+      "size_x":4000,
+      "size_y":20
+    },
+
+    {
+      "type":"Booster",
+      "pos_x":500,
+      "pos_y":70,
+      "size_x":20,
+      "size_y":1000,
+      "boost":1
+    },
+
+    {
+      "type":"Booster",
+      "pos_x":2000,
+      "pos_y":70,
+      "size_x":20,
+      "size_y":1000,
+      "boost":0
+    }
+
+  ]
+}

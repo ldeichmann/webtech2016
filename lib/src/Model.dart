@@ -55,6 +55,8 @@ class Model {
   /// Horizontal speed
   int speed;
 
+  int isBoosting;
+
   /// Creates Model instance
   Model(int viewport_x, int viewport_y, int speed) {
     this.visibleBlocks = new List<Block>(20);
@@ -94,6 +96,15 @@ class Model {
     this.distance += 1; // tick = point
     this.score = this.distance + this.points;
 
+//    if (this.currentLevel.boost) {
+//      if (score % 1000 == 0) {
+//        this.player.enableBoosting();
+//      } else if ((score-200) % 1000 == 0) {
+//        print("disable boosting");
+//        this.player.disableBoosting();
+//      }
+//    }
+//
     log("Model: update() tick");
 
   }

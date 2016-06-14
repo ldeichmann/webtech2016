@@ -6,6 +6,7 @@ class Level {
   List<Block> blockList_static;
   List<Block> blockList_dynamic;
   Spawn spawn;
+  bool boost;
 
   Level(String jsonString) {
     List<Block> blockList_static = new List<Block>();
@@ -16,6 +17,7 @@ class Level {
       this.speed = jsonData["speed"] ?? 5;
       var levelSpawn = jsonData["spawn"];
       this.spawn = new Spawn(0, levelSpawn["pos_x"], levelSpawn["pos_y"], levelSpawn["size_x"], levelSpawn["size_y"]);
+      this.boost = jsonData["boost"] == 1 ? true : false;
 
       var blocks = jsonData["blocks"];
       if (blocks != null) {
@@ -147,6 +149,14 @@ class Level {
                   m["size_y"], m["message"]);
               log(newMessage.toString());
               blockList_static.add(newMessage);
+              break;
+
+            case "Booster":
+              var newBooster = new Booster(
+                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
+                  m["size_y"], m["boost"] == 1);
+              log(newBooster.toString());
+              blockList_static.add(newBooster);
               break;
           }
         }

@@ -23,6 +23,8 @@ class Player {
   bool doubleJump;
   bool grounded;
 
+  bool booster;
+
   int get pos_x => _pos_x;
   set pos_x(int ox) {
     _pos_x= ox;
@@ -41,21 +43,38 @@ class Player {
     this.jumping = true;
     this.doubleJump = false;
     this.grounded = false;
+    this.booster = false;
   }
 
   void jump() {
-    log("Player: jump()");
-    if (this.jumping && !this.doubleJump) {
-      log("Player: jump() Double Jump");
-      this.doubleJump = true;
+    if (this.booster) {
+      log("Player: jump() boost");
       velocity_y = jumpSpeed * 2.0;
-    }
-    if (!this.jumping && this.grounded) {
-      log("Player: jump() Jumping");
-      jumping = true;
       grounded = false;
-      velocity_y = jumpSpeed * 2.0;
+      this.jumping = true;
+      this.doubleJump = true;
+    } else {
+      log("Player: jump()");
+      if (this.jumping && !this.doubleJump) {
+        log("Player: jump() Double Jump");
+        this.doubleJump = true;
+        velocity_y = jumpSpeed * 2.0;
+      }
+      if (!this.jumping && this.grounded) {
+        log("Player: jump() Jumping");
+        jumping = true;
+        grounded = false;
+        velocity_y = jumpSpeed * 2.0;
+      }
     }
+  }
+
+  void enableBoosting () {
+    this.booster = true;
+  }
+
+  void disableBoosting() {
+    this.booster = false;
   }
 
   void fall() {
