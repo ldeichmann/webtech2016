@@ -52,6 +52,14 @@
     "filename":"level7.json"
   },
   {
+    "name":"Level 8 - Last straw",
+    "filename":"level8.json"
+  },
+  {
+    "name":"Level 8+ - Last stand",
+    "filename":"level8plus.json"
+  },
+  {
     "name":"Level ∞ - 'Til Death",
     "filename":"levelinfinite1.json"
   }
