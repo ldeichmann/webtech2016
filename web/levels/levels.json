@@ -60,6 +60,10 @@
     "filename":"level8plus.json"
   },
   {
+    "name":"Level 8∞ - Insanity",
+    "filename":"level8infinite.json"
+  },
+  {
     "name":"Level ∞ - 'Til Death",
     "filename":"levelinfinite1.json"
   }
