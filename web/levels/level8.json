@@ -1,5 +1,6 @@
 {
   "name":"Level 8 - The Curse",
+  "nextLevel":"levelinfinite1.json",
   "speed":5,
 
   "spawn":{

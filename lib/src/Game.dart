@@ -112,6 +112,11 @@ class Game {
     });
 
     // register click on restart button
+    this.view.restartButtonStartNext.onClick.listen(
+        (event) => this.startNextLevel());
+
+
+    // register click on restart button
     this.view.restartButtonRestart.onClick.listen(
         (event) => this.restartGame());
 
@@ -351,6 +356,15 @@ class Game {
       // wait 10ms to make sure the Futures have completed...
       await new Future.delayed(const Duration(milliseconds: 10), () => "1");
       startGame(this.model.currentLevelName);
+    }
+  }
+
+  void startNextLevel() {
+    String next = this.model.currentLevel.nextLevel;
+    if (next != null) {
+      this.startGame(next);
+    } else {
+      window.alert("No next level set!");
     }
   }
 

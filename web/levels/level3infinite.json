@@ -1,5 +1,6 @@
 {
   "name":"Level 3",
+  "nextLevel":"level4infinite.json",
   "speed":5,
   "spawn":{
     "type":"Spawn",

@@ -1,5 +1,6 @@
 {
   "name": "Infinite - Notinfinite",
+  "nextLevel":"level7.json",
   "speed": 5,
   "spawn": {
     "type": "Spawn",

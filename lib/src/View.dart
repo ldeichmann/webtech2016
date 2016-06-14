@@ -13,6 +13,7 @@ class View {
 
   /// Restart clickables container
   DivElement restartContainer;
+  DivElement restartButtonStartNext;
   DivElement restartButtonRestart;
   DivElement restartButtonSubmit;
   DivElement restartButtonMenu;
@@ -105,6 +106,7 @@ class View {
     this.restartHighscoreList = querySelector('#restart-overlay-highscores-list');
 
     this.restartContainer = querySelector('#restart-overlay-button-container');
+    this.restartButtonStartNext = querySelector("#restart-overlay-button-startnext");
     this.restartButtonRestart = querySelector("#restart-overlay-button-restart");
     this.restartButtonSubmit = querySelector('#restart-overlay-button-highscore');
     this.restartButtonMenu = querySelector('#restart-overlay-button-menu');
@@ -134,6 +136,7 @@ class View {
     this.menuButtonLimiter.text = "30fps - ✕";
     this.menuButtonQuality.text = "Quality: Bad";
 
+    this.restartButtonStartNext.text = "Next Level";
     this.restartButtonRestart.text = "Restart";
     this.restartButtonSubmit.text = "Submit Highscore";
     this.restartButtonMenu.text = "Return to Menu";

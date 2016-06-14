@@ -1,7 +1,7 @@
 {
   "name":"Level 8 infinite - The Curse",
+  "nextLevel":"levelinfinite1.json",
   "speed":5,
-
   "spawn":{
     "type":"Spawn",
     "pos_x":60,

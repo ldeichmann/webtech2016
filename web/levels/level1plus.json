@@ -1,6 +1,7 @@
 {
   "name":"Level 1 Plus",
   "speed":5,
+  "nextLevel":"level4plus.json",
   "spawn":{
     "type":"Spawn",
     "pos_x":100,

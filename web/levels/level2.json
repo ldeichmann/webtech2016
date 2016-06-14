@@ -1,5 +1,6 @@
 {
   "name":"Level 2",
+  "nextLevel":"level3.json",
   "speed":5,
   "spawn":{
     "type":"Spawn",
