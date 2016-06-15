@@ -55,10 +55,8 @@ class Model {
   /// Horizontal speed
   int speed;
 
-  int isBoosting;
-
   /// Creates Model instance
-  Model(int viewport_x, int viewport_y, int speed) {
+  Model(int viewport_x, int viewport_y) {
     this.visibleBlocks = new List<Block>(20);
     this.levels = new Map<String, String>();
     this.highscores = new List<Map<String, String>>();
@@ -66,7 +64,7 @@ class Model {
     this.viewport_x = viewport_x;
     this.viewport_y = viewport_y;
 
-    this.speed = speed;
+    this.speed = 5;
 
     this.state = State.MENU;
 

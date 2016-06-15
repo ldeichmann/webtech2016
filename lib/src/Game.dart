@@ -10,9 +10,6 @@ class Game {
   static const int viewport_x = 600;
   static const int viewport_y = 330;
 
-  /// Constant defining games horizontal speed
-  static const int speed = 5;
-
   /// Constant of the relative path which stores the GameKey settings.
   static const gamekeySettings = 'gamekey.json';
 
@@ -73,7 +70,7 @@ class Game {
 
 
     // instantiate model and view
-    this.model = new Model(viewport_x, viewport_y, speed);
+    this.model = new Model(viewport_x, viewport_y);
     this.view = new View(viewport_x, viewport_y);
 
 
