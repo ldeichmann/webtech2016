@@ -6,19 +6,19 @@ class SpeedBlock extends Block {
   bool collected;
 
   SpeedBlock(int id, int pos_x, int pos_y, int size_x, int size_y, int speed) : super(id, pos_x, pos_y, size_x, size_y) {
-    this.canCollide = true;
-    this.isDeadly = false;
-    this.name = "SpeedBlock";
+    canCollide = true;
+    isDeadly = false;
+    name = "SpeedBlock";
     this.speedIncrease = speed;
-    this.isVisible = true;
+    isVisible = true;
   }
 
   //returns true if landed, false if not
   @override
   bool onCollision(Model m, Player p, Direction d) {
-    if (!this.collected) {
-      this.collected = true;
-      m.speed += this.speedIncrease;
+    if (!collected) {
+      collected = true;
+      m.speed += speedIncrease;
     }
     return false;
   }

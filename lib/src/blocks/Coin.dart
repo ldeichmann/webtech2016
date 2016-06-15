@@ -6,21 +6,21 @@ class Coin extends Block {
   bool collected;
 
   Coin(int id, int pos_x, int pos_y, int size_x, int size_y, int value) : super(id, pos_x, pos_y, size_x, size_y) {
-    this.canCollide = true;
-    this.isDeadly = false;
-    this.name = "Coin";
+    canCollide = true;
+    isDeadly = false;
+    name = "Coin";
     this.value = value;
-    this.collected = false;
+    collected = false;
   }
 
   @override
   bool onCollision(Model m, Player p, Direction d) {
     log("Coin collision!");
-    if (!this.collected) {
+    if (!collected) {
 
-      this.collected = true;
-      this.isVisible = false;
-      m.points += this.value;
+      collected = true;
+      isVisible = false;
+      m.points += value;
 
     }
     return false;

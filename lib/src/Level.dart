@@ -15,11 +15,11 @@ class Level {
 
     try {
       Map jsonData = JSON.decode(jsonString);
-      this.speed = jsonData["speed"] ?? 5;
+      speed = jsonData["speed"] ?? 5;
       var levelSpawn = jsonData["spawn"];
-      this.spawn = new Spawn(0, levelSpawn["pos_x"], levelSpawn["pos_y"], levelSpawn["size_x"], levelSpawn["size_y"]);
-      this.boost = jsonData["boost"] == 1 ? true : false;
-      this.nextLevel = jsonData["nextLevel"];
+      spawn = new Spawn(0, levelSpawn["pos_x"], levelSpawn["pos_y"], levelSpawn["size_x"], levelSpawn["size_y"]);
+      boost = jsonData["boost"] == 1 ? true : false;
+      nextLevel = jsonData["nextLevel"];
 
       var blocks = jsonData["blocks"];
       if (blocks != null) {

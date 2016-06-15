@@ -8,6 +8,7 @@ import 'package:crypto/crypto.dart';
 part 'src/Game.dart';
 part 'src/Level.dart';
 part 'src/Model.dart';
+part 'src/Rect.dart';
 part 'src/Player.dart';
 part 'src/View.dart';
 part 'src/HighscoreGamekey.dart';

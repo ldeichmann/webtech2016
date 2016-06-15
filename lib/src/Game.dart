@@ -37,136 +37,134 @@ class Game {
   /// Launches Main Menu
   Game() {
 
+    // instantiate model and view
+    model = new Model(viewport_x, viewport_y);
+    view = new View(viewport_x, viewport_y);
+
     try {
       // Download gamekey settings. Display warning on problems.
       HttpRequest.getString(gamekeySettings).then((json) {
         final settings = JSON.decode(json);
 
         // Create gamekey client using connection parameters
-        this.gamekey = new HighscoreGamekey(
+        gamekey = new HighscoreGamekey(
             settings['host'],
             settings['port'],
             settings['id'],
-            settings['secret'] //TODO la di da,
+            settings['secret']
         );
 
-        this.gamekey.authenticate();
+        gamekey.authenticate();
 
         // Check periodically if GameKey service is reachable. Display warning if not.
-        this.gamekeyTrigger = new Timer.periodic(gamekeyCheck, (_) async {
-          if (await this.gamekey.authenticate()) {
-            this.view.statusMessage.text = '';
+        gamekeyTrigger = new Timer.periodic(gamekeyCheck, (_) async {
+          if (await gamekey.authenticate()) {
+            view.statusMessage.text = '';
           } else {
-            this.view.statusMessage.text = 'GK unavailable';
+            view.statusMessage.text = 'Highscores unavailable';
             print("Game: Game() Gamekey not connected");
           }
         });
       });
     } catch (error, stacktrace) {
-      print ("Game: Game() Error: '$error'");
-      print ("$stacktrace");
-      this.view.statusMessage.text = 'GK Error';
+      log("Game: Game() Error: '$error'");
+      log("$stacktrace");
     }
 
-
-    // instantiate model and view
-    this.model = new Model(viewport_x, viewport_y);
-    this.view = new View(viewport_x, viewport_y);
-
-
     // get local storage
-    this.localStorage =  window.localStorage;
+    localStorage =  window.localStorage;
 
     // get stored quality setting
-    this.quality = this.localStorage["quality"] == null ?
+    quality = localStorage["quality"] == null ?
     Quality.MEDIUM :
-    Quality.values[int.parse(this.localStorage["quality"])];
+    Quality.values[int.parse(localStorage["quality"])];
 
-    this.view.updateQuality(this.quality);
+    view.updateQuality(quality);
 
-    this.limitFramerate = this.localStorage["limit"] == "on" ? true : false;
-    this.view.updateLimiter(this.limitFramerate);
+    limitFramerate = localStorage["limit"] == "on" ? true : false;
+    view.updateLimiter(limitFramerate);
 
-    print(this.limitFramerate);
+    log("Limit Framerate: $limitFramerate");
 
     // register keyboard input
     window.onKeyDown.listen((KeyboardEvent ev) async {
       switch (ev.keyCode) {
-        case KeyCode.UP:    this.jump(); break;
-        case KeyCode.SPACE: this.jump(); break;
-        case KeyCode.ESC:     this.restartGame(); break;
+        case KeyCode.UP:    jump(); break;
+        case KeyCode.SPACE: jump(); break;
+        case KeyCode.ESC:   restartGame(); break;
       }
     });
 
 
     // register touchscreen input
     window.onTouchStart.listen((TouchEvent ev) async {
-      this.jump();
+      jump();
     });
 
     window.onResize.listen((Event ev) {
-      this.resizeGame();
+      resizeGame();
     });
 
     // register click on restart button
-    this.view.restartButtonStartNext.onClick.listen(
-        (event) => this.startNextLevel());
+    view.restartButtonStartNext.onClick.listen(
+        (event) => startNextLevel());
 
 
     // register click on restart button
-    this.view.restartButtonRestart.onClick.listen(
-        (event) => this.restartGame());
+    view.restartButtonRestart.onClick.listen(
+        (event) => restartGame());
 
 
     // register click on return to main menu button
-    this.view.restartButtonMenu.onClick.listen((event) => this.mainMenu());
+    view.restartButtonMenu.onClick.listen((event) => mainMenu());
 
     // register click on start button in main menu
-    this.view.menuButtonStart.onClick.listen((event) {
+    view.menuButtonStart.onClick.listen((event) {
 
-      String level = this.view.menuLevelSelect.selectedOptions[0].value;
-      this.startGame(level);
+      String level = view.menuLevelSelect.selectedOptions[0].value;
+      startGame(level);
 
     });
 
-    this.view.menuButtonLimiter.onClick.listen((event) {
-      if (this.limitFramerate) {
-        this.limitFramerate = false;
-        this.localStorage["limit"] = "off";
+    view.menuButtonLimiter.onClick.listen((event) {
+      if (limitFramerate) {
+        limitFramerate = false;
+        localStorage["limit"] = "off";
       } else {
-        this.limitFramerate = true;
-        this.localStorage["limit"] = "on";
+        limitFramerate = true;
+        localStorage["limit"] = "on";
       }
-      this.view.updateLimiter(this.limitFramerate);
+      view.updateLimiter(limitFramerate);
     });
 
-    this.view.menuButtonQuality.onClick.listen((event) {
-      switch (this.quality) {
+    view.menuButtonQuality.onClick.listen((event) {
+      switch (quality) {
         case Quality.HIGH:
-          this.quality = Quality.LOW;
-          this.localStorage["quality"] = Quality.LOW.index.toString();
+          quality = Quality.LOW;
+          localStorage["quality"] = Quality.LOW.index.toString();
           break;
         case Quality.MEDIUM:
-          this.quality = Quality.HIGH;
-          this.localStorage["quality"] = Quality.HIGH.index.toString();
+          quality = Quality.HIGH;
+          localStorage["quality"] = Quality.HIGH.index.toString();
           break;
         case Quality.LOW:
-          this.quality = Quality.MEDIUM;
-          this.localStorage["quality"] = Quality.MEDIUM.index.toString();
+          quality = Quality.MEDIUM;
+          localStorage["quality"] = Quality.MEDIUM.index.toString();
           break;
 
       }
-      this.view.updateQuality(this.quality);
+      view.updateQuality(quality);
+      resizeGame();
     });
 
 
     // register click on submit highscore button
-    this.view.restartButtonSubmit.onClick.listen((event) => this.showLogin());
+    view.restartButtonSubmit.onClick.listen((event) => showLogin());
 
     // register click on login button
-    this.view.restartLoginSubmit.onClick.listen((event) => this.submitScore());
+    view.restartLoginSubmit.onClick.listen((event) => submitScore());
 
-    this.resizeGame();
+    resizeGame();
 
   }
 
@@ -174,7 +172,7 @@ class Game {
     int win_x = window.innerWidth;
     int win_y = window.innerHeight;
 
-    this.view.rescale(win_x, win_y);
+    view.rescale(win_x, win_y, quality);
   }
 
   /// Retrieves Level
@@ -189,17 +187,13 @@ class Game {
   /// Jumps.
   ///
   /// Performs the jump action for the current game state
-  jump() async {
-    if (model.state == State.WON || model.state == State.FAIL) {
-//      this.restartGame();
-    } else {
-      this.model.jump();
-    }
+  void jump() {
+      model.jump();
   }
 
   void skipUpdate(int num) {
-    this.view.update(this.model);
-    window.animationFrame.then(this.update);
+    view.update(model);
+    window.animationFrame.then(update);
   }
 
   /// Updates the game
@@ -207,21 +201,21 @@ class Game {
   /// Updates the model and view due to Timer [t] call
   void update(int num) {
     log("Game: update()");
-    if (this.model.state == State.RUNNING) {
+    if (model.state == State.RUNNING) {
       log("Game: update() - running");
 
-      this.model.update();
-      if (this.limitFramerate) {
-        this.model.update();
-        window.animationFrame.then(this.skipUpdate);
+      model.update();
+      if (limitFramerate) {
+        model.update();
+        window.animationFrame.then(skipUpdate);
       } else {
-        this.view.update(this.model);
-        window.animationFrame.then(this.update);
+        view.update(model);
+        window.animationFrame.then(update);
       }
     } else {
-      this.setHighscores();
+      setHighscores();
 
-      this.view.update(this.model);
+      view.update(model);
     }
   }
 
@@ -242,10 +236,10 @@ class Game {
         'scores' : entry['state']['scores']
       });
 
-      scores = levels.where((entry) => (entry["scores"]["${this.model.currentLevelHash}"] != null)).map((entry) => {
+      scores = levels.where((entry) => (entry["scores"]["${model.currentLevelHash}"] != null)).map((entry) => {
         'name' : "${entry['username']}",
         'date' : "${entry['date']}",
-        'score' : entry["scores"]["${this.model.currentLevelHash}"]
+        'score' : entry["scores"]["${model.currentLevelHash}"]
       }).toList();
 
       scores.sort((a, b) => DateTime.parse(a['date']).compareTo(DateTime.parse(b['date'])));
@@ -280,13 +274,13 @@ class Game {
       }
       final stored = await gamekey.storeState(usr['id'], {
         "scores": {
-          "${this.model.currentLevelHash}" : this.model.score
+          "${model.currentLevelHash}" : model.score
         },
         'version': '0.0.1'
       });
       if (stored) {
-        this.view.hideHighscoreLogin();
-        this.setHighscores();
+        view.hideHighscoreLogin();
+        setHighscores();
         return;
       } else {
         view.statusMessage.text = "Error";
@@ -305,14 +299,14 @@ class Game {
 
       final stored = await gamekey.storeState(user['id'], {
         "scores": {
-          "${this.model.currentLevelHash}" : this.model.score
+          "${model.currentLevelHash}" : model.score
         },
         'version': '0.0.1'
       });
       if (stored) {
-        this.view.hideHighscoreLogin();
-        this.view.hideHighscoreSubmit();
-        this.setHighscores();
+        view.hideHighscoreLogin();
+        view.hideHighscoreSubmit();
+        setHighscores();
         return;
       } else {
         view.statusMessage.text = "Error";
@@ -323,22 +317,22 @@ class Game {
 
   /// Causes score to be stored and returns the user to main menu
   submitScore() async {
-    this.storeHighscore();
+    storeHighscore();
 
-    this.model.highscores = await getHighscores();
-    this.view.update(this.model); // update as soon as we have scores
+    model.highscores = await getHighscores();
+    view.update(model); // update as soon as we have scores
   }
 
   /// Shows the login mask
   void showLogin() {
-    this.view.showHighscoreLogin();
+    view.showHighscoreLogin();
   }
 
   /// Updates the highscores for the current level
   setHighscores() async {
 
-    this.model.highscores =  await getHighscores();
-    this.view.update(this.model); // update as soon as we have scores
+    model.highscores =  await getHighscores();
+    view.update(model); // update as soon as we have scores
 
   }
 
@@ -346,20 +340,20 @@ class Game {
   ///
   /// Very hacky way to restart the game
   restartGame() async {
-    if (this.model.state != State.MENU) {
-      this.model.fail();
-      this.update(0);
+    if (model.state != State.MENU) {
+      model.fail();
+      update(0);
 
       // wait 10ms to make sure the Futures have completed...
       await new Future.delayed(const Duration(milliseconds: 10), () => "1");
-      startGame(this.model.currentLevelName);
+      startGame(model.currentLevelName);
     }
   }
 
   void startNextLevel() {
-    String next = this.model.currentLevel.nextLevel;
+    String next = model.currentLevel.nextLevel;
     if (next != null) {
-      this.startGame(next);
+      startGame(next);
     } else {
       window.alert("No next level set!");
     }
@@ -370,14 +364,14 @@ class Game {
   /// Starts the game on the given [level]
   startGame(String level) async {
 
-    await getLevel(level).then((levelJson) => this.model.setLevel(levelJson));
-    this.model.currentLevelName = level;
+    await getLevel(level).then((levelJson) => model.setLevel(levelJson));
+    model.currentLevelName = level;
 
-    this.model.start();
-    this.view.onStart(this.model);
-    this.view.update(this.model);
+    model.start();
+    view.onStart(model);
+    view.update(model);
 
-    window.animationFrame.then(this.update);
+    window.animationFrame.then(update);
   }
 
   /// Opens the main menu
@@ -389,10 +383,10 @@ class Game {
 
     var request = await HttpRequest.getString(levels).asStream().join();
 
-    this.model.setLevelList(request);
-    this.model.mainMenu();
+    model.setLevelList(request);
+    model.mainMenu();
 
-    this.view.update(this.model);
+    view.update(model);
 
 
   }

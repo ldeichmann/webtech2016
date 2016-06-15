@@ -1,6 +1,6 @@
 part of runner;
 
-class Player {
+class Player extends Rect {
 
   //fall values
   static double gravity = 0.8;
@@ -10,12 +10,6 @@ class Player {
   // distance from left game border
   static const int player_offset = 100;
 
-  //pos size vel
-  int pos_y;
-  int _pos_x;
-
-  int size_x;
-  int size_y;
   double velocity_y;
 
   //state
@@ -25,42 +19,36 @@ class Player {
 
   bool booster;
 
-  int get pos_x => _pos_x;
-  set pos_x(int ox) {
-    _pos_x= ox;
-    log("Player: set pos_x() ox $ox pos_x $_pos_x");
-  }
-
   Player() {
-    this.pos_y = 50;
-    this.pos_x = player_offset; // move slightly to the right
+    pos_y = 50;
+    pos_x = player_offset; // move slightly to the right
 
-    this.size_x = 20;
-    this.size_y = 50;
+    size_x = 20;
+    size_y = 50;
 
-    this.velocity_y = -1.0;
+    velocity_y = -1.0;
 
-    this.jumping = true;
-    this.doubleJump = false;
-    this.grounded = false;
-    this.booster = false;
+    jumping = true;
+    doubleJump = false;
+    grounded = false;
+    booster = false;
   }
 
   void jump() {
-    if (this.booster) {
+    if (booster) {
       log("Player: jump() boost");
       velocity_y = jumpSpeed * 2.0;
       grounded = false;
-      this.jumping = true;
-      this.doubleJump = true;
+      jumping = true;
+      doubleJump = true;
     } else {
       log("Player: jump()");
-      if (this.jumping && !this.doubleJump) {
+      if (jumping && !doubleJump) {
         log("Player: jump() Double Jump");
-        this.doubleJump = true;
+        doubleJump = true;
         velocity_y = jumpSpeed * 2.0;
       }
-      if (!this.jumping && this.grounded) {
+      if (!jumping && grounded) {
         log("Player: jump() Jumping");
         jumping = true;
         grounded = false;
@@ -70,57 +58,46 @@ class Player {
   }
 
   void enableBoosting () {
-    this.booster = true;
+    booster = true;
   }
 
   void disableBoosting() {
-    this.booster = false;
+    booster = false;
   }
 
   void fall() {
-    this.grounded = false;
+    grounded = false;
   }
 
   void hitRoof() {
-    this.jumping = true;
-    this.doubleJump = true;
-    this.velocity_y = -1.0;
+    jumping = true;
+    doubleJump = true;
+    velocity_y = -1.0;
   }
 
   void update() {
     if (!grounded) {
-      this.pos_y = (this.pos_y + velocity_y).round();
-      this.velocity_y -= gravity;
-      if (this.velocity_y < -this.maxVelocity) { // don't accelerate to stupid falling speeds
-        this.velocity_y = -this.maxVelocity;
+      pos_y = (pos_y + velocity_y).round();
+      velocity_y -= gravity;
+      if (velocity_y < -maxVelocity) { // don't accelerate to stupid falling speeds
+        velocity_y = -maxVelocity;
       }
     }
-    log("Player: update() ${this.pos_x} ${this.pos_y}");
+    log("Player: update() ${pos_x} ${pos_y}");
   }
 
-  int getPosY() {
-    return this.pos_y;
-  }
-
-  double centerX() {
-    return (this.pos_x + (this.size_x/2));
-  }
-
-  double centerY() {
-    return (this.pos_y + (this.size_y/2));
-  }
 
   void landed() {
-    this.velocity_y = 0.0;
-    this.grounded = true;
-    this.jumping = false;
-    this.doubleJump = false;
+    velocity_y = 0.0;
+    grounded = true;
+    jumping = false;
+    doubleJump = false;
   }
 
   void reset() {
-    this.pos_y = 50;
-    this.pos_x = 50; // move slightly to the right
-    this.landed();
+    pos_y = 50;
+    pos_x = 50; // move slightly to the right
+    landed();
   }
 
   void onCollision(String direction) {
