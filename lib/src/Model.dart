@@ -136,7 +136,7 @@ class Model {
     for (Block b in visibleBlocks) {
       if (b != null && b.canCollide) {
         if (player.intersects(b)) {
-          Direction dir = collisionDirectionRewind(player, b);
+          Direction dir = collisionDirectionRewind(b);
           if (b.onCollision(this, player, dir)) {
             player.landed();
             player.pos_y = b.pos_y + b.size_y;
@@ -167,7 +167,7 @@ class Model {
   /// Similar, if moving the player back on the x axis stopped the collision,
   /// the player collided from either [Direction.LEFT] or [Direction.RIGHT].
   /// Returns [Direction]
-  Direction collisionDirectionRewind(Player player, Block rect) {
+  Direction collisionDirectionRewind(Rect rect) {
     final int rewindFactor = 5;
 
     //player sliding on the floor
