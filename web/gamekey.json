@@ -1,8 +1,8 @@
 {
   "type":       "game",
   "name":       "tildeath",
-  "id":         "58064008-cdb2-4434-8d42-36efd39c649f",
-  "secret":     "3a04aece025f8a1d",
-  "host":       "212.201.22.161",
+  "id":         "c12f3f81-4a32-4523-ad73-d8732cf0d2ce",
+  "secret":     "f878dd4fb9c592f7",
+  "host":       "212.201.22.169",
   "port":       50001
 }
