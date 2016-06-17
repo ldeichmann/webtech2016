@@ -65,9 +65,11 @@ body {
 
 #game {
     position: absolute;
-    left: 0;
-    right: 0;
-    margin: auto;
+    height: 330px;
+    width: 600px;
+
+    left: 50%;
+    margin-left: -305px;
     top:0;
     background-color: silver;
     z-index: 1;

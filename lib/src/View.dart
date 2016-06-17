@@ -3,8 +3,7 @@ part of runner;
 class View {
 
 
-  /// game containers
-  DivElement container;
+  /// game container
   DivElement gameElement;
 
   /// Restart overlay container
@@ -80,11 +79,10 @@ class View {
 
     qualityClass = new Map<String, String>();
 
-    container = querySelector('#container');
-
     gameElement = querySelector('#game');
     gameElement.style.width  = "${viewport_x}px";
     gameElement.style.height = "${viewport_y}px";
+    gameElement.style.marginLeft = "-${(viewport_x/2)+5}px";
 
     for (DivElement d in divs) {
       gameElement.children.add(d);
