@@ -53,7 +53,7 @@
       "pos_y":20,
       "size_x":5,
       "size_y":300,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":1500,

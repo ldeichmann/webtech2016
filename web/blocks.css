@@ -93,32 +93,32 @@
 
 .SpikesTop {
     z-index: 50;
-    background: url("resources/spikes-top.png");
-    background-size: 32px 32px;
-    background-repeat: repeat-x;
-    background-position: left bottom;
-}
-
-.SpikesTop-low {
-    z-index: 50;
-    background: none;
-    border-color: black;
-    border-bottom-color: red;
-}
-
-.SpikesBottom {
-    z-index: 50;
     background: url("resources/spikes-bottom.png");
     background-size: 32px 32px;
     background-repeat: repeat-x;
     background-position: left top;
 }
 
-.SpikesBottom-low {
+.SpikesTop-low {
     z-index: 50;
     background: none;
     border-color: black;
     border-top-color: red;
+}
+
+.SpikesBottom {
+    z-index: 50;
+    background: url("resources/spikes-top.png");
+    background-size: 32px 32px;
+    background-repeat: repeat-x;
+    background-position: left bottom;
+}
+
+.SpikesBottom-low {
+    z-index: 50;
+    background: none;
+    border-color: black;
+    border-bottom-color: red;
 }
 
 .Water {

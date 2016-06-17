@@ -27,7 +27,7 @@
     },
 
     {
-      "type":"SpikesTop",
+      "type":"SpikesBottom",
       "pos_x":600,
       "pos_y":140,
       "size_x":240,
@@ -69,7 +69,7 @@
     },
 
     {
-      "type":"SpikesBottom",
+      "type":"SpikesTop",
       "pos_x":1230,
       "pos_y":30,
       "size_x":210,
@@ -82,7 +82,7 @@
       "pos_y":30,
       "size_x":5,
       "size_y":300,
-      "bullets": [
+      "triggerables": [
         {
         "type":"Bullet",
         "pos_x":1900,
@@ -175,7 +175,7 @@
     },
 
     {
-      "type":"SpikesTop",
+      "type":"SpikesBottom",
       "pos_x":2420,
       "pos_y":120,
       "size_x":208,

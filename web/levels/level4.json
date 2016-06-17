@@ -89,7 +89,7 @@
       "pos_y":30,
       "size_x":5,
       "size_y":500,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":1100,
@@ -133,7 +133,7 @@
     "pos_y":30,
     "size_x":5,
     "size_y":300,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":1910,
@@ -198,7 +198,7 @@
       "pos_y":50,
       "size_x":5,
       "size_y":300,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":4300,

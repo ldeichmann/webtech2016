@@ -46,11 +46,12 @@
       "size_y":20
     },
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":2000,
       "pos_y":250,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
     {
       "type":"Cobble",

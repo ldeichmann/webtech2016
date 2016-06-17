@@ -78,6 +78,22 @@
       "value":300
     },
 
+
+    {
+      "type":"Teleport",
+      "pos_x":950,
+      "pos_y":280,
+      "size_x":20,
+      "size_y":20,
+      "target":{
+        "type":"Spawn",
+        "pos_x":1140,
+        "pos_y":301,
+        "size_x":20,
+        "size_y":50
+      }
+    },
+
     {
       "type":"Ground",
       "pos_x":1140,
@@ -231,22 +247,8 @@
       "pos_y":80,
       "size_x":20,
       "size_y":260
-    },
-
-    {
-      "type":"Teleport",
-      "pos_x":950,
-      "pos_y":280,
-      "size_x":20,
-      "size_y":20,
-      "target":{
-        "type":"Spawn",
-        "pos_x":1040,
-        "pos_y":301,
-        "size_x":20,
-        "size_y":50
-      }
     }
+
 
   ]
 }

@@ -5,22 +5,21 @@ class Coin extends Block {
   int value;
   bool collected;
 
-  Coin(int id, int pos_x, int pos_y, int size_x, int size_y, int value) : super(id, pos_x, pos_y, size_x, size_y) {
-    canCollide = true;
-    isDeadly = false;
+  Coin(int id, int pos_x, int pos_y, int size_x, int size_y, [int value, bool isDeadly, bool canCollide, bool isVisible])
+      : super(id, pos_x, pos_y, size_x, size_y, isDeadly, canCollide, isVisible) {
     name = "Coin";
-    this.value = value;
+    this.value = value ?? 0;
     collected = false;
   }
 
   @override
-  bool onCollision(Model m, Player p, Direction d) {
+  bool onCollisionExternal(Model model, Direction dir) {
     log("Coin collision!");
     if (!collected) {
 
-      collected = true;
+      collected = true; // set collected
       isVisible = false;
-      m.points += value;
+      model.points += value; // add value
 
     }
     return false;

@@ -137,7 +137,7 @@ class Model {
       if (b != null && b.canCollide) {
         if (player.intersects(b)) {
           Direction dir = collisionDirectionRewind(b);
-          if (b.onCollision(this, player, dir)) {
+          if (b.onCollision(this, dir)) {
             player.landed();
             player.pos_y = b.pos_y + b.size_y;
             onGround = true;
@@ -239,7 +239,7 @@ class Model {
 
   /// Calculates if [b] is within viewport
   bool isBlockVisible(Block b) {
-    if (((b.pos_x + b.size_x) > (player.pos_x - Player.player_offset) && (b.pos_x) < ((player.pos_x - Player.player_offset) + viewport_x)) && b.isVisible) {
+    if (((b.pos_x + b.size_x) > (player.pos_x - Player.player_offset) && (b.pos_x) < ((player.pos_x - Player.player_offset) + viewport_x)) && (b.isVisible || b.canCollide)) {
       return true;
     }
     return false;

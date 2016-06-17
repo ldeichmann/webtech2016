@@ -190,10 +190,10 @@ class View {
     for (int i = 0; i < model.visibleBlocks.length; i++) {
       Block b = model.visibleBlocks[i];
       DivElement d = divs[i];
-      if (b == null && d.style.display != "none") {
+      if ((b == null || !b.isVisible) && d.style.display != "none") {
         d.style.display = "none";
         d.dataset["id"] = "none";
-      } else if (b != null && ( (d.style.display == "none") || (d.dataset["id"] != b.id.toString()) )) {
+      } else if (b != null && b.isVisible && ( (d.style.display == "none") || (d.dataset["id"] != b.id.toString()) )) {
         d.style.display = "block";
         d.className = qualityClass[b.name];
         d.dataset["id"] = b.id.toString();
@@ -208,7 +208,7 @@ class View {
 
         d.style.left = "${b.pos_x  - model.player.pos_x + Player.player_offset}px";
         d.style.bottom = "${b.pos_y}px";
-      } else if (b != null) {
+      } else if (b != null && b.isVisible) {
         d.style.left = "${b.pos_x  - model.player.pos_x + Player.player_offset}px";
         d.style.bottom = "${b.pos_y}px";
       }

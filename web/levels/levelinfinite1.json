@@ -94,9 +94,17 @@
     {
       "type":"SpikesTop",
       "pos_x":2650,
+      "pos_y":125,
+      "size_x":100,
+      "size_y":15
+    },
+
+    {
+      "type":"SpikesBottom",
+      "pos_x":2650,
       "pos_y":110,
       "size_x":100,
-      "size_y":30
+      "size_y":15
     },
 
     {

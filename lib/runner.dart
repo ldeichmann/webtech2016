@@ -31,6 +31,7 @@ part 'src/blocks/TeleportSpeed.dart';
 part 'src/blocks/CoinKill.dart';
 part 'src/blocks/Message.dart';
 part 'src/blocks/Booster.dart';
+part 'src/blocks/Triggerable.dart';
 
 log(String msg) {
   if (false) {

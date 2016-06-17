@@ -5,35 +5,50 @@ class Block extends Rect {
   int id;
   String name = "Block";
 
-  //if object is moving faster than game, set speed_x != 0
-  int speed_x = 0;
+  //if object is moving, set speed_x != 0 or speed_y != 0
+  int speed_x;
+  int speed_y;
   bool isDeadly;
   bool canCollide;
   bool isVisible;
 
-  Block(int id, int pos_x, int pos_y, int size_x, int size_y) {
+  Block(int id, int pos_x, int pos_y, int size_x, int size_y, [bool isDeadly, bool canCollide, bool isVisible]) {
     this.id = id;
-    this.pos_x = pos_x;
-    this.pos_y = pos_y;
-    this.size_x = size_x;
-    this.size_y = size_y;
-    isVisible = true;
+    this.pos_x = pos_x ?? 0;
+    this.pos_y = pos_y ?? 0;
+    this.size_x = size_x ?? 0;
+    this.size_y = size_y ?? 0;
+    this.isVisible = isVisible ?? true;
+    this.canCollide = canCollide ?? true;
+    this.isDeadly = isDeadly ?? false;
+    speed_x = 0;
+    speed_y = 0;
   }
 
-  bool onCollision(Model m, Player p, Direction d) {
+  bool onCollisionExternal(Model model, Direction dir) {
+    log("${name} ${id} missing onCollisionExternal");
+    return true;
+  }
+
+  /// handles collision
+  ///
+  /// returns [true] if player landed
+  bool onCollision(Model model, Direction dir) {
     if (isDeadly) {
-      m.fail();
-      log("${name} ${id} killed player, coming from ${d}");
+      model.fail();
+      log("${name} ${id} killed player, coming from ${dir}");
       return false;
     } else {
-      return true;
+      return onCollisionExternal(model, dir);
     }
   }
 
+  /// updates block
+  ///
+  /// called every tick, updates block
   void onUpdate() {
-    if (speed_x != 0) {
-      pos_x += speed_x;
-    }
+    pos_x += speed_x;
+    pos_y += speed_y;
   }
 
   String toString() {

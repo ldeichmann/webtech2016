@@ -16,148 +16,322 @@ class Level {
       Map jsonData = JSON.decode(jsonString);
       speed = jsonData["speed"] ?? 5;
       var levelSpawn = jsonData["spawn"];
-      spawn = new Spawn(0, levelSpawn["pos_x"], levelSpawn["pos_y"], levelSpawn["size_x"], levelSpawn["size_y"]);
+      spawn = new Spawn(
+          0,
+          levelSpawn["pos_x"],
+          levelSpawn["pos_y"],
+          levelSpawn["size_x"],
+          levelSpawn["size_y"]
+      );
       nextLevel = jsonData["nextLevel"];
 
       var blocks = jsonData["blocks"];
       if (blocks != null) {
         for (Map m in jsonData["blocks"]) {
+
+          if (m["pos_x"] == null || m["pos_y"] == null || m["size_x"] == null || m["size_y"] == null) {
+            print('${m["id"]} is invalid');
+            continue;
+          }
+
           switch (m["type"]) {
+
+            //
+            // Ground-like elements
+            //
             case "Ground":
-              var newGround = new Ground(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newGround);
+                Block block = new Ground(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
             case "Wall":
-              var newWall = new Wall(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newWall);
+              Block block = new Wall(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
             case "Cobble":
-              var newCobble = new Cobble(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newCobble);
+              Block block = new Cobble(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
+
+            //
+            // Finish
+            //
 
             case "Finish":
-              var newFinish = new Finish(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newFinish);
+              Block block = new Finish(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
+            //
+            // Valuables
+            //
+
+            case "Coin":
+              Block block = new Coin(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["value"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_dynamic.add(block);
+              break;
+
+
+            //
+            // obstacles
+            //
+
             case "Water":
-              var newWater = new Water(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newWater);
+              Block block = new Water(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
             case "SpikesTop":
-              var newSpikes = new SpikesTop(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newSpikes);
+              Block block = new SpikesTop(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
             case "SpikesBottom":
-              var newSpikes = new SpikesBottom(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              blockList_static.add(newSpikes);
+              Block block = new SpikesBottom(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
-            case "Coin":
-              var newCoin = new Coin(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], m["value"] ?? 0);
-              blockList_dynamic.add(newCoin);
-              break;
+            //
+            // Teleporters
+            //
 
             case "Teleport":
               var b = m["target"];
 
-              var newSpawn = new Spawn(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), b["pos_x"], b["pos_y"], b["size_x"],
-                  b["size_y"]);
-              blockList_static.add(newSpawn);
+              Block target = new Spawn(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  b["pos_x"],
+                  b["pos_y"],
+                  b["size_x"],
+                  b["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(target);
 
-              var newTeleport = new Teleport(blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], newSpawn);
-              blockList_static.add(newTeleport);
+              Block block = new Teleport(blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  target,
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
             case "TeleportSpeed":
               var b = m["target"];
 
-              var newSpawn = new Spawn(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), b["pos_x"], b["pos_y"], b["size_x"],
-                  b["size_y"]);
-              blockList_static.add(newSpawn);
+              Block target = new Spawn(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  b["pos_x"],
+                  b["pos_y"],
+                  b["size_x"],
+                  b["size_y"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(target);
 
-              var newTeleportSpeed = new TeleportSpeed(blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], newSpawn, m["speedIncrease"]);
-              blockList_static.add(newTeleportSpeed);
-              break;
-
-            case "Trigger":
-              var bullets = m["bullets"];
-
-              List<Bullet> bulletList = new List<Block>();
-
-              for (Map b in bullets) {
-                var newBullet = new Bullet(
-                    blockList_static.length + (blockList_dynamic.length ?? 0), b["pos_x"], b["pos_y"], b["size_x"],
-                    b["size_y"]);
-                log(newBullet.toString());
-                bulletList.add(newBullet);
-                blockList_dynamic.add(newBullet);
-              }
-
-
-              var newTrigger = new Trigger(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], bulletList);
-              log(newTrigger.toString());
-              blockList_static.add(newTrigger);
-              break;
-
-            case "SpeedBlock":
-              var newSpeedBlock = new SpeedBlock(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], m["speedIncrease"]);
-              log(newSpeedBlock.toString());
-              blockList_static.add(newSpeedBlock);
+              Block block = new TeleportSpeed(blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  target,
+                  m["speedIncrease"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              blockList_static.add(block);
               break;
 
             case "CoinKill":
-              var newCoinKill = new CoinKill(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"]);
-              log(newCoinKill.toString());
-              blockList_static.add(newCoinKill);
+              window.alert("Remove Coinkill!");
               break;
 
+            //
+            // Trigger && Triggerables
+            //
+
+            case "Trigger":
+              var triggerables = m["triggerables"];
+
+              List<Triggerable> triggerableList = new List<Triggerable>();
+
+              for (Map b in triggerables) {
+                switch(b["type"]) {
+                  case "Bullet":
+                    Block triggerable = new Bullet(
+                        blockList_static.length + (blockList_dynamic.length ?? 0),
+                        b["pos_x"],
+                        b["pos_y"],
+                        b["size_x"],
+                        b["size_y"],
+                        b["isDeadly"],
+                        b["canCollide"],
+                        b['isVisible']
+                    );
+                    log(triggerable.toString());
+                    triggerableList.add(triggerable);
+                    blockList_dynamic.add(triggerable);
+                    break;
+
+                  case "Booster":
+                    Block triggerable = new Booster(
+                        blockList_static.length + (blockList_dynamic.length ?? 0),
+                        b["pos_x"],
+                        b["pos_y"],
+                        b["size_x"],
+                        b["size_y"],
+                        b["boost"],
+                        b["isDeadly"],
+                        b["canCollide"],
+                        b['isVisible']
+                    );
+                    log(triggerable.toString());
+                    triggerableList.add(triggerable);
+                    blockList_static.add(triggerable);
+                    break;
+
+                  case "SpeedBlock":
+                    Block triggerable = new SpeedBlock(
+                        blockList_static.length + (blockList_dynamic.length ?? 0),
+                        b["pos_x"],
+                        b["pos_y"],
+                        b["size_x"],
+                        b["size_y"],
+                        b["speedIncrease"],
+                        b["isDeadly"],
+                        b["canCollide"],
+                        b['isVisible']
+                    );
+                    log(triggerable.toString());
+                    triggerableList.add(triggerable);
+                    blockList_static.add(triggerable);
+                    break;
+
+                }
+
+
+              }
+
+
+              Block block = new Trigger(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  triggerableList,
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              log(block.toString());
+              blockList_static.add(block);
+              break;
+
+            //
+            // misc
+            //
             case "Message":
-              var newMessage = new Message(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], m["message"]);
-              log(newMessage.toString());
-              blockList_static.add(newMessage);
+              Block block = new Message(
+                  blockList_static.length + (blockList_dynamic.length ?? 0),
+                  m["pos_x"],
+                  m["pos_y"],
+                  m["size_x"],
+                  m["size_y"],
+                  m["message"],
+                  m["isDeadly"],
+                  m["canCollide"],
+                  m['isVisible']
+              );
+              log(block.toString());
+              blockList_static.add(block);
               break;
 
-            case "Booster":
-              var newBooster = new Booster(
-                  blockList_static.length + (blockList_dynamic.length ?? 0), m["pos_x"], m["pos_y"], m["size_x"],
-                  m["size_y"], m["boost"] == 1);
-              log(newBooster.toString());
-              blockList_static.add(newBooster);
-              break;
+
           }
         }
       }

@@ -20,22 +20,31 @@
     },
 
     {
-      "type":"Booster",
+      "type":"Trigger",
       "pos_x":500,
       "pos_y":70,
       "size_x":20,
       "size_y":1000,
-      "boost":1
+      "triggerables":[
+        {
+          "type":"Booster",
+          "boost":true
+        }
+      ]
     },
 
     {
-      "type":"Booster",
+      "type":"Trigger",
       "pos_x":2000,
       "pos_y":70,
       "size_x":20,
       "size_y":1000,
-      "boost":0
+      "triggerables":[
+        {
+          "type":"Booster",
+          "boost":false
+        }
+      ]
     }
-
   ]
 }
