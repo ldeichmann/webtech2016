@@ -28,7 +28,6 @@ part 'src/blocks/SpikesTop.dart';
 part 'src/blocks/SpikesBottom.dart';
 part 'src/blocks/SpeedBlock.dart';
 part 'src/blocks/TeleportSpeed.dart';
-part 'src/blocks/CoinKill.dart';
 part 'src/blocks/Message.dart';
 part 'src/blocks/Booster.dart';
 part 'src/blocks/Triggerable.dart';
