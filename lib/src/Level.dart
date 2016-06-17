@@ -226,10 +226,6 @@ class Level {
               blockList_static.add(block);
               break;
 
-            case "CoinKill":
-              window.alert("Remove Coinkill!");
-              break;
-
             //
             // Trigger && Triggerables
             //
