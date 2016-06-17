@@ -97,11 +97,7 @@ class Player extends Rect {
   void reset() {
     pos_y = 50;
     pos_x = 50; // move slightly to the right
+    booster = false;
     landed();
   }
-
-  void onCollision(String direction) {
-    //TODO: see collision detection
-  }
-
 }

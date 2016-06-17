@@ -6,7 +6,6 @@ class Level {
   List<Block> blockList_static;
   List<Block> blockList_dynamic;
   Spawn spawn;
-  bool boost;
   String nextLevel;
 
   Level(String jsonString) {
@@ -18,7 +17,6 @@ class Level {
       speed = jsonData["speed"] ?? 5;
       var levelSpawn = jsonData["spawn"];
       spawn = new Spawn(0, levelSpawn["pos_x"], levelSpawn["pos_y"], levelSpawn["size_x"], levelSpawn["size_y"]);
-      boost = jsonData["boost"] == 1 ? true : false;
       nextLevel = jsonData["nextLevel"];
 
       var blocks = jsonData["blocks"];
