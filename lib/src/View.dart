@@ -53,9 +53,9 @@ class View {
   /// Player element
   DivElement player;
 
-  /// Map of used divs by id
-  Map<int, DivElement> usedDivs;
-
+//  /// Map of used divs by id
+//  Map<int, DivElement> usedDivs;
+//
   /// Map for current quality class settings
   Map<String, String> qualityClass;
 
@@ -75,7 +75,7 @@ class View {
 
 
 
-    usedDivs = new Map<int, DivElement>();
+//    usedDivs = new Map<int, DivElement>();
 
     qualityClass = new Map<String, String>();
 
