@@ -3,7 +3,7 @@ part of runner;
 class Player extends Rect {
 
   //fall values
-  static double gravity = 0.8;
+  static const double gravity = 0.8;
   double maxVelocity = 8.0;
   static const int jumpSpeed = 5;
 
@@ -57,7 +57,7 @@ class Player extends Rect {
     }
   }
 
-  void enableBoosting () {
+  void enableBoosting() {
     booster = true;
   }
 
