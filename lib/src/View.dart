@@ -238,7 +238,7 @@ class View {
         qualityClass["SpikesBottom"] = "SpikesBottom block";
         qualityClass["SpikesTop"] = "SpikesTop block";
         qualityClass["Teleport"] = "Teleport block";
-        qualityClass["Trigger"] = "Trigger block-low";
+        qualityClass["Trigger"] = "";
         qualityClass["Wall"] = "Wall block";
         qualityClass["Water"] = "Water block";
 
@@ -256,7 +256,7 @@ class View {
         qualityClass["SpikesBottom"] = "SpikesBottom-low block-med";
         qualityClass["SpikesTop"] = "SpikesTop-low block-med";
         qualityClass["Teleport"] = "Teleport-low block-med";
-        qualityClass["Trigger"] = "Trigger block-med";
+        qualityClass["Trigger"] = "";
         qualityClass["Wall"] = "Wall-low block-med";
         qualityClass["Water"] = "Water-low block-med";
 
@@ -273,7 +273,7 @@ class View {
         qualityClass["SpikesBottom"] = "SpikesBottom-low block-low";
         qualityClass["SpikesTop"] = "SpikesTop-low block-low";
         qualityClass["Teleport"] = "Teleport-low block-low";
-        qualityClass["Trigger"] = "Trigger block-low";
+        qualityClass["Trigger"] = "";
         qualityClass["Wall"] = "Wall-low block-low";
         qualityClass["Water"] = "Water-low block-low";
 

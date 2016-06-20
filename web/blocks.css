@@ -133,9 +133,10 @@
 }
 
 .Trigger {
-    border-color: white;
+    /*border-color: white;*/
     position: absolute;
     z-index: 40;
+    display: none;
 }
 
 .Teleport {
