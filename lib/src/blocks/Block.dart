@@ -2,16 +2,28 @@ part of runner;
 
 class Block extends Rect {
 
+  /// Block ID
   int id;
+
+  /// Block class name, thanks dart2js
   String name = "Block";
 
   //if object is moving, set speed_x != 0 or speed_y != 0
+  /// speed
   int speed_x;
   int speed_y;
+
+  /// if true kills player on contact
   bool isDeadly;
+
+  /// if true can have contact with player
   bool canCollide;
+
+  /// if true block is visible
   bool isVisible;
 
+
+  /// Creates a block instance
   Block(int id, int pos_x, int pos_y, int size_x, int size_y, [bool isDeadly, bool canCollide, bool isVisible]) {
     this.id = id;
     this.pos_x = pos_x ?? 0;
@@ -25,6 +37,9 @@ class Block extends Rect {
     speed_y = 0;
   }
 
+  /// handles collision
+  ///
+  /// override this for block specific behaviour
   bool onCollisionExternal(Model model, Direction dir) {
     log("${name} ${id} missing onCollisionExternal");
     return true;
@@ -51,6 +66,7 @@ class Block extends Rect {
     pos_y += speed_y;
   }
 
+  /// Create String
   String toString() {
     var buffer = new StringBuffer();
     buffer.write(name);

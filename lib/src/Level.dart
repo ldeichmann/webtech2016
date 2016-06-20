@@ -2,18 +2,32 @@ part of runner;
 
 class Level {
 
+  /// Level Speed
   int speed;
+
+  /// List of static elements in level, grounds etc.
   List<Block> blockList_static;
+
+  /// List of dynamic elements that may change positions, bullets etc.
   List<Block> blockList_dynamic;
+
+  /// Level entry point
   Spawn spawn;
+
+  /// filename of the following level
   String nextLevel;
 
+  /// Creates new Level
+  ///
+  /// Creates a new Level from a String containing a JSON Formatted Level
   Level(String jsonString) {
     List<Block> blockList_static = new List<Block>();
     List<Block> blockList_dynamic = new List<Block>();
 
     try {
+      // decode json
       Map jsonData = JSON.decode(jsonString);
+
       speed = jsonData["speed"] ?? 5;
       var levelSpawn = jsonData["spawn"];
       spawn = new Spawn(

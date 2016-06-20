@@ -168,6 +168,7 @@ class Game {
 
   }
 
+  /// Call resize on View
   void resizeGame() {
     int win_x = window.innerWidth;
     int win_y = window.innerHeight;
@@ -191,6 +192,8 @@ class Game {
       model.jump();
   }
 
+
+  /// Alternate Update method called by update when limitFramrate is set
   void skipUpdate(int num) {
     view.update(model);
     window.animationFrame.then(update);
@@ -350,10 +353,17 @@ class Game {
     }
   }
 
+  /// Starts next level relative to current level
+  ///
+  /// Start nextLevel stored in curentLevel, shows alert if invalid
   void startNextLevel() {
     String next = model.currentLevel.nextLevel;
     if (next != null) {
-      startGame(next);
+      try {
+        startGame(next);
+      } catch (error, stacktrace) {
+        window.alert("Invalid next level!");
+      }
     } else {
       window.alert("No next level set!");
     }

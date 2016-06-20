@@ -41,8 +41,13 @@ class Model {
   /// First visible block index
   int visibleIndex;
 
+  /// Distance traveled by player
   int distance;
+
+  /// Current Score
   int score;
+
+  /// Current extra point, eg from coins
   int points;
 
   /// List of Blocks currently in viewport
@@ -222,12 +227,14 @@ class Model {
 
   }
 
+  /// Clears all blocks from visibleBlocks Array
   void clearVisibleBlocks() {
     for (int i = 0; i < visibleBlocks.length; i++) {
       visibleBlocks[i] = null;
     }
   }
 
+  /// Adds Block to first free slot in visibleBlocks
   void addToVisibleBlocks(Block b) {
     for (int i = 0; i < visibleBlocks.length; i++) {
       if (visibleBlocks[i] == null) {
@@ -245,6 +252,7 @@ class Model {
     return false;
   }
 
+  /// Resets the visiblityIndex, causing next [getVisibleBlocks] call to do a full search
   void resetVisibleIndex() {
     visibleIndex = 0;
   }
@@ -286,7 +294,7 @@ class Model {
     log(visibleBlocks.toString());
   }
 
-  /// Hashes Strings based on number theory
+  /// Hashes Strings based on sha256
   String hash(String s) {
     List<int> bytes = UTF8.encode(s);
 

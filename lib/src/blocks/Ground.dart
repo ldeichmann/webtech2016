@@ -2,12 +2,16 @@ part of runner;
 
 class Ground extends Block {
 
+  /// Creates Ground instance
   Ground(int id, int pos_x, int pos_y, int size_x, int size_y, [bool isDeadly, bool canCollide, bool isVisible])
       : super(id, pos_x, pos_y, size_x, size_y, isDeadly, canCollide, isVisible) {
     name = "Ground";
   }
 
-  //returns true if landed, false if not
+  /// Basic floor collision detection
+  ///
+  /// Return true if player landed, false otherwise, kill him if
+  /// he touches the side
   @override
   bool onCollisionExternal(Model model, Direction dir) {
     log("${name} ${id} collision with player, coming from ${dir}");

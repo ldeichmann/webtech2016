@@ -1,17 +1,21 @@
 part of runner;
 
 class Rect {
-  //pos size vel
+  /// Positions
   int pos_y;
   int pos_x;
 
+  /// Dimensions
   int size_x;
   int size_y;
 
+
+  /// Calculates the horizontal center of a Rect
   double centerX() {
     return (pos_x + (size_x/2));
   }
 
+  /// Calculates the vertical center of a Rect
   double centerY() {
     return (pos_y + (size_y/2));
   }

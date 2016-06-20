@@ -53,9 +53,6 @@ class View {
   /// Player element
   DivElement player;
 
-//  /// Map of used divs by id
-//  Map<int, DivElement> usedDivs;
-//
   /// Map for current quality class settings
   Map<String, String> qualityClass;
 
@@ -184,6 +181,9 @@ class View {
     }
   }
 
+  /// Draw visible Blocks
+  ///
+  /// Updates all Blocks to fit their counterpart in the visibleBlocks
   void drawBlocks(Model model) {
     for (int i = 0; i < model.visibleBlocks.length; i++) {
       Block b = model.visibleBlocks[i];
@@ -213,7 +213,7 @@ class View {
     }
   }
 
-  /// Draws list of visible Blocks on screen
+  /// Update Game Elements
   void updateGame(Model model) {
 
     drawBlocks(model);
@@ -282,6 +282,7 @@ class View {
     }
   }
 
+  /// Update text on limiter button
   void updateLimiter(bool limited) {
     if (!limited) {
       menuButtonLimiter.text = "Framerate: 60fps";
@@ -330,10 +331,12 @@ class View {
     restartLogin.style.display = "none";
   }
 
+  /// Hides submit button in login mask
   void hideHighscoreSubmit() {
     restartButtonSubmit.style.display = "none";
   }
 
+  /// Shows submit button in login mask
   void showHighscoreSubmit() {
     restartButtonSubmit.style.display = "inline-block";
   }

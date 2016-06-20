@@ -2,12 +2,13 @@ part of runner;
 
 class SpikesTop extends Block {
 
+  /// Creates SpikesTop instance
   SpikesTop(int id, int pos_x, int pos_y, int size_x, int size_y, [bool isDeadly, bool canCollide, bool isVisible])
       : super(id, pos_x, pos_y, size_x, size_y, isDeadly, canCollide, isVisible) {
     name = "SpikesTop";
   }
 
-  //kills from bottom, not from top
+  /// Kills player if collisiom from top, as there are spikes, as well as left and right
   @override
   bool onCollisionExternal(Model model, Direction dir) {
     log("${name} ${id} collision with player, coming from ${dir}");
