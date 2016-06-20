@@ -1,9 +1,5 @@
 [
   {
-    "name":"Level Boost",
-    "filename":"levelbooster.json"
-  },
-  {
     "name":"Level 1 - Beginnings",
     "filename":"level1.json"
   },
@@ -70,6 +66,10 @@
   {
     "name":"Level ∞ - 'Til Death",
     "filename":"levelinfinite1.json"
+  },
+  {
+    "name":"Bonus: Flappy Death",
+    "filename":"levelbooster.json"
   }
 
 ]
