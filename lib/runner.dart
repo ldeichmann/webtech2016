@@ -8,6 +8,7 @@ import 'package:crypto/crypto.dart';
 part 'src/Game.dart';
 part 'src/Level.dart';
 part 'src/Model.dart';
+part 'src/Rect.dart';
 part 'src/Player.dart';
 part 'src/View.dart';
 part 'src/HighscoreGamekey.dart';
@@ -27,8 +28,9 @@ part 'src/blocks/SpikesTop.dart';
 part 'src/blocks/SpikesBottom.dart';
 part 'src/blocks/SpeedBlock.dart';
 part 'src/blocks/TeleportSpeed.dart';
-part 'src/blocks/CoinKill.dart';
 part 'src/blocks/Message.dart';
+part 'src/blocks/Booster.dart';
+part 'src/blocks/Triggerable.dart';
 
 log(String msg) {
   if (false) {

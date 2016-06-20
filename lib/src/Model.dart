@@ -41,8 +41,13 @@ class Model {
   /// First visible block index
   int visibleIndex;
 
+  /// Distance traveled by player
   int distance;
+
+  /// Current Score
   int score;
+
+  /// Current extra point, eg from coins
   int points;
 
   /// List of Blocks currently in viewport
@@ -56,19 +61,16 @@ class Model {
   int speed;
 
   /// Creates Model instance
-  Model(int viewport_x, int viewport_y, int speed) {
-    this.visibleBlocks = new List<Block>(20);
-    this.levels = new Map<String, String>();
-    this.highscores = new List<Map<String, String>>();
+  Model(this.viewport_x, this.viewport_y) {
+    visibleBlocks = new List<Block>(20);
+    levels = new Map<String, String>();
+    highscores = new List<Map<String, String>>();
 
-    this.viewport_x = viewport_x;
-    this.viewport_y = viewport_y;
+    speed = 5;
 
-    this.speed = speed;
+    state = State.MENU;
 
-    this.state = State.MENU;
-
-    this.player = new Player();
+    player = new Player();
   }
 
   /// Updates the model
@@ -76,23 +78,24 @@ class Model {
   /// Updates the position of every object, detects collisions and increases score
   void update() {
 
-    if (this.state != State.RUNNING) {
+    if (state != State.RUNNING) {
       return;
     }
 
     getVisibleBlocks();
 
-    this.player.update();
+    // update vertical position
+    player.update();
 
-    this.visibleBlocks.where((b) => b != null).forEach((b) => b.onUpdate());
-    this.player.pos_x = this.player.pos_x + this.speed;
+    visibleBlocks.where((b) => b != null).forEach((b) => b.onUpdate());
+    player.pos_x += speed;
     detectCollisions();
 
-    if (this.player.getPosY() < 0) {
-      this.fail();
+    if (player.pos_y < 0) {
+      fail();
     }
-    this.distance += 1; // tick = point
-    this.score = this.distance + this.points;
+    distance += 1; // tick = point
+    score = distance + points;
 
     log("Model: update() tick");
 
@@ -100,76 +103,64 @@ class Model {
 
   /// Sets game to fail state
   void fail() {
-    this.state = State.FAIL;
+    state = State.FAIL;
   }
 
   /// Sets game to won state
   void finish() {
-    this.state = State.WON;
+    state = State.WON;
   }
 
   /// Sets game to running state on current level
   void start() {
-    this.player.reset();
-    this.resetVisibleIndex();
-    this.clearVisibleBlocks();
-    this.player.pos_x = currentLevel.spawn.pos_x;
-    this.player.pos_y = currentLevel.spawn.pos_y;
-    this.points = 0;
-    this.distance = 0;
-    this.state = State.RUNNING;
+    player.reset();
+    resetVisibleIndex();
+    clearVisibleBlocks();
+    player.pos_x = currentLevel.spawn.pos_x;
+    player.pos_y = currentLevel.spawn.pos_y;
+    points = 0;
+    score = 0;
+    distance = 0;
+    state = State.RUNNING;
+  }
+
+  /// Sets game state to main menu
+  void mainMenu() {
+
+    state = State.MENU;
+
   }
 
   /// Detects players collision with objects
   ///
   /// Detects the players collision with objects in the game world.
-  /// The first detection uses [simpleRectCollision] to detect a collision,
+  /// The first detection uses [Rect.intersects] to detect a collision,
   /// the second detection uses [collisionDirectionRewind] to find its direction
   void detectCollisions() {
     bool onGround = false;
-    for (Block b in this.visibleBlocks) {
+    for (Block b in visibleBlocks) {
       if (b != null && b.canCollide) {
-        if (playerCollision(b)) {
-          Direction dir = collisionDirectionRewind(this.player, b);
-          if (b.onCollision(this, this.player, dir)) {
-            this.player.landed();
-            this.player.pos_y = b.pos_y + b.size_y;
+        if (player.intersects(b)) {
+          Direction dir = collisionDirectionRewind(b);
+          if (b.onCollision(this, dir)) {
+            player.landed();
+            player.pos_y = b.pos_y + b.size_y;
             onGround = true;
           }
         }
       }
     }
     if (!onGround) {
-      this.player.fall();
+      player.fall();
     }
   }
 
   /// Makes player jump
   void jump() {
-    log("Model: jump()");
-    this.player.jump();
-  }
-
-  /// Detects collisions between rectangles
-  bool simpleRectCollision(int r1_pos_x, int r1_pos_y, int r1_size_x, int r1_size_y,
-      int r2_pos_x, int r2_pos_y, int r2_size_x, int r2_size_y) {
-
-    if ((r1_pos_x <= r2_pos_x + r2_size_x) &&
-        (r1_pos_x + r1_size_x) >= r2_pos_x &&
-        r1_pos_y <= (r2_pos_y + r2_size_y) &&
-        (r1_size_y + r1_pos_y) >= r2_pos_y) {
-      return true;
-    } else {
-      return false;
+    if (state == State.RUNNING) {
+      log("Model: jump()");
+      player.jump();
     }
-
-  }
-
-
-  /// Detects collision between [Player] and given [Block]
-  bool playerCollision(Block rect) {
-    return this.simpleRectCollision((this.player.pos_x), this.player.pos_y, this.player.size_x, this.player.size_y,
-        rect.pos_x, rect.pos_y, rect.size_x, rect.size_y);
   }
 
   /// Detects collision direction
@@ -181,7 +172,7 @@ class Model {
   /// Similar, if moving the player back on the x axis stopped the collision,
   /// the player collided from either [Direction.LEFT] or [Direction.RIGHT].
   /// Returns [Direction]
-  Direction collisionDirectionRewind(Player player, Block rect) {
+  Direction collisionDirectionRewind(Rect rect) {
     final int rewindFactor = 5;
 
     //player sliding on the floor
@@ -190,23 +181,29 @@ class Model {
       return Direction.TOP;
     }
 
+    //save player position
+    int saved_pos_x = player.pos_x;
+    int saved_pos_y = player.pos_y;
+
     //rewind time to find collision
-    int rewind_x = this.player.pos_x;
-    int rewind_y = this.player.pos_y;
+    int rewind_x = player.pos_x;
+    int rewind_y = player.pos_y;
     int rewindCounter = 0;
 
 
     while(rewindCounter < rewindFactor) { // don't rewind past last event
-      rewind_y -= ((this.player.velocity_y/rewindFactor).round()).toInt();
-      if (!this.simpleRectCollision(rewind_x, rewind_y, this.player.size_x, this.player.size_y,
-          rect.pos_x, rect.pos_y, rect.size_x, rect.size_y)) {
-        return this.player.velocity_y <= 0 ? Direction.TOP : Direction.BOTTOM;
+      player.pos_y -= ((player.velocity_y/rewindFactor).round()).toInt();
+      if (!player.intersects(rect)) {
+        player.pos_x = saved_pos_x;
+        player.pos_y = saved_pos_y;
+        return player.velocity_y <= 0 ? Direction.TOP : Direction.BOTTOM;
       }
       log("Model: collisionDirectionRewind() rewind_y $rewind_y");
 
-      rewind_x -= this.speed ~/ rewindFactor;
-      if (!this.simpleRectCollision(rewind_x, rewind_y, this.player.size_x, this.player.size_y,
-          rect.pos_x, rect.pos_y, rect.size_x, rect.size_y)) {
+      player.pos_x -= speed ~/ rewindFactor;
+      if (!player.intersects(rect)) {
+        player.pos_x = saved_pos_x;
+        player.pos_y = saved_pos_y;
         return Direction.LEFT;
       }
       log("Model: collisionDirectionRewind() rewind_x $rewind_x");
@@ -215,28 +212,33 @@ class Model {
     }
 
     // well this isn't elegant...
-    rewind_y -= ((this.player.velocity_y).ceil()).toInt();
-    if (!this.simpleRectCollision(rewind_x, rewind_y, this.player.size_x, this.player.size_y,
-        rect.pos_x, rect.pos_y, rect.size_x, rect.size_y)) {
-      return this.player.velocity_y <= 0 ? Direction.TOP : Direction.BOTTOM;
+    player.pos_y -= ((player.velocity_y).ceil()).toInt();
+    if (!player.intersects(rect)) {
+      player.pos_x = saved_pos_x;
+      player.pos_y = saved_pos_y;
+      return player.velocity_y <= 0 ? Direction.TOP : Direction.BOTTOM;
     }
     log("Model: collisionDirectionRewind() rewind_y $rewind_y - LAST RESORT!");
 
+    player.pos_x = saved_pos_x;
+    player.pos_y = saved_pos_y;
     // insane default
     return Direction.RIGHT;
 
   }
 
+  /// Clears all blocks from visibleBlocks Array
   void clearVisibleBlocks() {
-    for (int i = 0; i < this.visibleBlocks.length; i++) {
-      this.visibleBlocks[i] = null;
+    for (int i = 0; i < visibleBlocks.length; i++) {
+      visibleBlocks[i] = null;
     }
   }
 
+  /// Adds Block to first free slot in visibleBlocks
   void addToVisibleBlocks(Block b) {
-    for (int i = 0; i < this.visibleBlocks.length; i++) {
-      if (this.visibleBlocks[i] == null) {
-        this.visibleBlocks[i] = b;
+    for (int i = 0; i < visibleBlocks.length; i++) {
+      if (visibleBlocks[i] == null) {
+        visibleBlocks[i] = b;
         break;
       }
     }
@@ -244,38 +246,39 @@ class Model {
 
   /// Calculates if [b] is within viewport
   bool isBlockVisible(Block b) {
-    if (((b.pos_x + b.size_x) > (this.player.pos_x - Player.player_offset) && (b.pos_x) < ((this.player.pos_x - Player.player_offset) + viewport_x)) && b.isVisible) {
+    if (((b.pos_x + b.size_x) > (player.pos_x - Player.player_offset) && (b.pos_x) < ((player.pos_x - Player.player_offset) + viewport_x)) && (b.isVisible || b.canCollide)) {
       return true;
     }
     return false;
   }
 
+  /// Resets the visiblityIndex, causing next [getVisibleBlocks] call to do a full search
   void resetVisibleIndex() {
-    this.visibleIndex = 0;
+    visibleIndex = 0;
   }
 
   /// Sets [visibleBlocks] to currently visible Blocks
   void getVisibleBlocks() {
-    this.clearVisibleBlocks();
+    clearVisibleBlocks();
     bool visibleSet = false;
     int countFails = 0;
     const int upperTolerance = 10;
     const int lowerTolerance = 5;
     //get all visible blocks, break when we reach invisible blocks
-    for (int i = this.visibleIndex; i < currentLevel.blockList_static.length; i++) {
+    for (int i = visibleIndex; i < currentLevel.blockList_static.length; i++) {
       Block b = currentLevel.blockList_static[i];
       if (isBlockVisible(b)) {
-        this.addToVisibleBlocks(b);
+        addToVisibleBlocks(b);
         if (!visibleSet) {
-          this.visibleIndex = i - lowerTolerance;
+          visibleIndex = i - lowerTolerance;
           visibleSet = true;
           countFails = 0;
-          if ( this.visibleIndex.isNegative ) {
-            this.visibleIndex = 0;
+          if ( visibleIndex.isNegative ) {
+            visibleIndex = 0;
             continue;
           }
         }
-      } else if (visibleBlocks.length > 0 && countFails >= upperTolerance) {
+      } else if (visibleBlocks.length > 0 && countFails >= upperTolerance && visibleSet) {
         // we've most likely passed the visible blocks, break
         log("Model: getVisibleBlocks() breaking after ${countFails} misses");
         break;
@@ -285,13 +288,13 @@ class Model {
     }
     for (Block b in currentLevel.blockList_dynamic) {
       if (isBlockVisible(b)) {
-        this.addToVisibleBlocks(b);
+        addToVisibleBlocks(b);
       }
     }
     log(visibleBlocks.toString());
   }
 
-  /// Hashes Strings based on number theory
+  /// Hashes Strings based on sha256
   String hash(String s) {
     List<int> bytes = UTF8.encode(s);
 
@@ -300,19 +303,19 @@ class Model {
 
   /// Sets [currentLevel] to JSON [level]
   void setLevel(String level) {
-    this.currentLevel = new Level(level);
-    this.currentLevelHash = hash(level);
-    this.speed = currentLevel.speed ?? 5;
+    currentLevel = new Level(level);
+    currentLevelHash = hash(level);
+    speed = currentLevel.speed ?? 5;
   }
 
   /// Sets [levels] to levels listed in [jsonString]
   void setLevelList(String jsonString) {
-    this.levels.clear();
+    levels.clear();
 
     try {
       var jsonData = JSON.decode(jsonString);
       for (Map m in jsonData) {
-        this.levels[m["name"]] = m["filename"];
+        levels[m["name"]] = m["filename"];
       }
     } catch(error, stacktrace) {
       print("Model: setLevelList() Error: ${error}");
@@ -321,11 +324,5 @@ class Model {
 
   }
 
-  /// Sets game state to main menu
-  void mainMenu() {
-
-    this.state = State.MENU;
-
-  }
 
 }

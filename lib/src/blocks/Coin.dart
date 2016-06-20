@@ -2,25 +2,29 @@ part of runner;
 
 class Coin extends Block {
 
+  /// Points the coin is worth
   int value;
+
+  /// Has coin been collected
   bool collected;
 
-  Coin(int id, int pos_x, int pos_y, int size_x, int size_y, int value) : super(id, pos_x, pos_y, size_x, size_y) {
-    this.canCollide = true;
-    this.isDeadly = false;
-    this.name = "Coin";
-    this.value = value;
-    this.collected = false;
+  /// Creates Coin instance
+  Coin(int id, int pos_x, int pos_y, int size_x, int size_y, [int value, bool isDeadly, bool canCollide, bool isVisible])
+      : super(id, pos_x, pos_y, size_x, size_y, isDeadly, canCollide, isVisible) {
+    name = "Coin";
+    this.value = value ?? 0;
+    collected = false;
   }
 
+  /// Increases Score by [value]
   @override
-  bool onCollision(Model m, Player p, Direction d) {
+  bool onCollisionExternal(Model model, Direction dir) {
     log("Coin collision!");
-    if (!this.collected) {
+    if (!collected) {
 
-      this.collected = true;
-      this.isVisible = false;
-      m.points += this.value;
+      collected = true; // set collected
+      isVisible = false;
+      model.points += value; // add value
 
     }
     return false;

@@ -2,25 +2,27 @@ part of runner;
 
 class TeleportSpeed extends Teleport {
 
+  /// Spawn to which to teleport the player
   Spawn spawn;
+
+  /// Value by which speed is modified
   int speedIncrease;
 
-  TeleportSpeed(int id, int pos_x, int pos_y, int size_x, int size_y, Spawn s, int speedIncrease) : super(id, pos_x, pos_y, size_x, size_y, s) {
-    this.canCollide = true;
-    this.isDeadly = false;
-    this.name = "Teleport";
-    this.spawn = s;
-    this.speedIncrease = speedIncrease;
+  /// Creates TeleportSpeed instance
+  TeleportSpeed(int id, int pos_x, int pos_y, int size_x, int size_y, Spawn s, [int speedIncrease, bool isDeadly, bool canCollide, bool isVisible])
+      : super(id, pos_x, pos_y, size_x, size_y, s, isDeadly, canCollide, isVisible) {
+    name = "Teleport";
+    this.speedIncrease = speedIncrease ?? 0;
   }
 
-  //returns true if landed, false if not
+  /// Teleport player and modify level speed
   @override
-  bool onCollision(Model m, Player p, Direction d) {
-    m.speed += this.speedIncrease;
-    p.reset();
-    m.resetVisibleIndex();
-    m.player.pos_x = this.spawn.pos_x + m.player.pos_x;
-    p.pos_y = this.spawn.pos_y;
+  bool onCollisionExternal(Model model, Direction dir) {
+    model.speed += speedIncrease;
+    model.player.reset();
+    model.resetVisibleIndex();
+    model.player.pos_x = spawn.pos_x;
+    model.player.pos_y = spawn.pos_y;
     return false;
   }
 }

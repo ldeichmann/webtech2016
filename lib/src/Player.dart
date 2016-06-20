@@ -1,111 +1,133 @@
 part of runner;
 
-class Player {
+class Player extends Rect {
 
-  //fall values
-  static double gravity = 0.8;
+  /// Gravity by which falling is accelerated
+  static const double gravity = 0.8;
+
+  /// maximum falling velocity, basically terminal velocity
   double maxVelocity = 8.0;
+
+  /// Speed to begin jumping on
   static const int jumpSpeed = 5;
 
-  // distance from left game border
+  /// distance from left game border
   static const int player_offset = 100;
 
-  //pos size vel
-  int pos_y;
-  int _pos_x;
-
-  int size_x;
-  int size_y;
+  /// Current Player velocity
   double velocity_y;
 
-  //state
+  /// Player is jumping
   bool jumping;
+
+  /// Player is double jumping
   bool doubleJump;
+
+  /// Player is on the ground
   bool grounded;
 
-  int get pos_x => _pos_x;
-  set pos_x(int ox) {
-    _pos_x= ox;
-    log("Player: set pos_x() ox $ox pos_x $_pos_x");
-  }
+  /// Player can boost/jump forever
+  bool booster;
 
+
+  /// Initialize Player instance
   Player() {
-    this.pos_y = 50;
-    this.pos_x = player_offset; // move slightly to the right
+    pos_y = 50;
+    pos_x = player_offset; // move slightly to the right
 
-    this.size_x = 20;
-    this.size_y = 50;
+    size_x = 20;
+    size_y = 50;
 
-    this.velocity_y = -1.0;
+    velocity_y = -1.0;
 
-    this.jumping = true;
-    this.doubleJump = false;
-    this.grounded = false;
+    jumping = true;
+    doubleJump = false;
+    grounded = false;
+    booster = false;
   }
 
+  /// Process jump request
+  ///
+  /// Either jumps, doublejumps, boosts or does absolutely nothing, based on states
   void jump() {
-    log("Player: jump()");
-    if (this.jumping && !this.doubleJump) {
-      log("Player: jump() Double Jump");
-      this.doubleJump = true;
+    if (booster) {
+      log("Player: jump() boost");
       velocity_y = jumpSpeed * 2.0;
-    }
-    if (!this.jumping && this.grounded) {
-      log("Player: jump() Jumping");
-      jumping = true;
       grounded = false;
-      velocity_y = jumpSpeed * 2.0;
-    }
-  }
-
-  void fall() {
-    this.grounded = false;
-  }
-
-  void hitRoof() {
-    this.jumping = true;
-    this.doubleJump = true;
-    this.velocity_y = -1.0;
-  }
-
-  void update() {
-    if (!grounded) {
-      this.pos_y = (this.pos_y + velocity_y).round();
-      this.velocity_y -= gravity;
-      if (this.velocity_y < -this.maxVelocity) { // don't accelerate to stupid falling speeds
-        this.velocity_y = -this.maxVelocity;
+      jumping = true;
+      doubleJump = true;
+    } else {
+      log("Player: jump()");
+      if (jumping && !doubleJump) {
+        log("Player: jump() Double Jump");
+        doubleJump = true;
+        velocity_y = jumpSpeed * 2.0;
+      }
+      if (!jumping && grounded) {
+        log("Player: jump() Jumping");
+        jumping = true;
+        grounded = false;
+        velocity_y = jumpSpeed * 2.0;
       }
     }
-    log("Player: update() ${this.pos_x} ${this.pos_y}");
   }
 
-  int getPosY() {
-    return this.pos_y;
+  /// Enables Boosting for Player
+  void enableBoosting() {
+    booster = true;
   }
 
-  double centerX() {
-    return (this.pos_x + (this.size_x/2));
+  /// Disables Boosting for Player
+  void disableBoosting() {
+    booster = false;
   }
 
-  double centerY() {
-    return (this.pos_y + (this.size_y/2));
+  /// Set Player to fall
+  ///
+  /// Player is falling when leaving the ground, either when jumping or simply falling of the floor
+  void fall() {
+    grounded = false;
   }
 
+
+  /// Player "hit his head"
+  ///
+  /// Sets player to fall as he just hit something with his head
+  void hitRoof() {
+    jumping = true;
+    doubleJump = true;
+    velocity_y = -1.0;
+  }
+
+  /// Update Player vertical position
+  ///
+  /// Updates the Players vertical position based on velocity and state
+  void update() {
+    if (!grounded) {
+      pos_y = (pos_y + velocity_y).round();
+      velocity_y -= gravity;
+      if (velocity_y < -maxVelocity) { // don't accelerate to stupid falling speeds
+        velocity_y = -maxVelocity;
+      }
+    }
+    log("Player: update() ${pos_x} ${pos_y}");
+  }
+
+  /// Set Player to grounded
+  ///
+  /// Resets jumping state as the player landed and can jump again
   void landed() {
-    this.velocity_y = 0.0;
-    this.grounded = true;
-    this.jumping = false;
-    this.doubleJump = false;
+    velocity_y = 0.0;
+    grounded = true;
+    jumping = false;
+    doubleJump = false;
   }
 
+  /// Reset player Position to somewhat sane default and reset the states
   void reset() {
-    this.pos_y = 50;
-    this.pos_x = 50; // move slightly to the right
-    this.landed();
+    pos_y = 50;
+    pos_x = 50;
+    booster = false;
+    landed();
   }
-
-  void onCollision(String direction) {
-    //TODO: see collision detection
-  }
-
 }

@@ -1,6 +1,7 @@
 {
   "name":"Level 4+",
   "speed":5,
+  "nextLevel":"level8plus.json",
   "spawn":{
     "type":"Spawn",
     "pos_x":100,
@@ -18,10 +19,10 @@
     },
     {
       "type": "Finish",
-      "pos_x": -7000,
-      "pos_y": 20,
+      "pos_x": -7020,
+      "pos_y": 40,
       "size_x": 20,
-      "size_y": 100
+      "size_y": 290
     },
     {
       "type":"Coin",
@@ -494,7 +495,7 @@
       "pos_y":30,
       "size_x":5,
       "size_y":50,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":1100,
@@ -526,11 +527,13 @@
       "size_y": 20
     },
     {
-      "type":"Teleport",
+      "type":"TeleportSpeed",
       "pos_x":1500,
       "pos_y":300,
-      "size_x":50,
-      "size_y":50,
+      "size_x":5,
+      "size_y":5,
+      "speedIncrease":3,
+      "isVisible":false,
       "target":{
         "type":"Spawn",
         "pos_x":-10000,
@@ -552,7 +555,7 @@
     "pos_y":30,
     "size_x":5,
     "size_y":300,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":1910,
@@ -617,7 +620,7 @@
       "pos_y":50,
       "size_x":5,
       "size_y":300,
-      "bullets": [
+      "triggerables": [
         {
           "type":"Bullet",
           "pos_x":4300,

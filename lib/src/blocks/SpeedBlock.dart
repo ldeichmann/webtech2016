@@ -1,25 +1,28 @@
 part of runner;
 
-class SpeedBlock extends Block {
+class SpeedBlock extends Triggerable {
 
+  /// Value to add onto current speed
   int speedIncrease;
+
+  /// Remember if collected
   bool collected;
 
-  SpeedBlock(int id, int pos_x, int pos_y, int size_x, int size_y, int speed) : super(id, pos_x, pos_y, size_x, size_y) {
-    this.canCollide = true;
-    this.isDeadly = false;
-    this.name = "SpeedBlock";
-    this.speedIncrease = speed;
-    this.isVisible = true;
+  /// Creates SpeedBlock instance
+  SpeedBlock(int id, int pos_x, int pos_y, int size_x, int size_y, [int speed, bool isDeadly, bool canCollide, bool isVisible])
+      : super(id, pos_x, pos_y, size_x, size_y, isDeadly, canCollide, isVisible) {
+    name = "SpeedBlock";
+    this.isVisible = isVisible ?? false;
+    this.speedIncrease = speed ?? 0;
+    collected = false;
   }
 
-  //returns true if landed, false if not
+  /// Increase or decrease speed depending on [speedIncrease]
   @override
-  bool onCollision(Model m, Player p, Direction d) {
-    if (!this.collected) {
-      this.collected = true;
-      m.speed += this.speedIncrease;
+  void start(Model model) {
+    if (!collected) {
+      collected = true;
+      model.speed += speedIncrease;
     }
-    return false;
   }
 }

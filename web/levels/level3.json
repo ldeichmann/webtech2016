@@ -1,5 +1,6 @@
 {
   "name":"Level 3",
+  "nextLevel":"level4.json",
   "speed":5,
   "spawn":{
     "type":"Spawn",
@@ -35,11 +36,12 @@
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":700,
       "pos_y":70,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
@@ -60,19 +62,21 @@
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":1450,
       "pos_y":70,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":1450,
       "pos_y":110,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
@@ -223,11 +227,12 @@
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":4950,
       "pos_y":150,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
@@ -239,19 +244,21 @@
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":5170,
       "pos_y":70,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":5280,
       "pos_y":70,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
@@ -263,19 +270,21 @@
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":5900,
       "pos_y":70,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {
-      "type":"CoinKill",
+      "type":"Coin",
       "pos_x":5940,
       "pos_y":70,
       "size_x":20,
-      "size_y":20
+      "size_y":20,
+      "isDeadly":true
     },
 
     {

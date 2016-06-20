@@ -1,5 +1,6 @@
 {
   "name":"Level 5 - Descent",
+  "nextLevel":"level6.json",
   "speed":5,
   "spawn":{
     "type":"Spawn",
@@ -53,7 +54,7 @@
       "size_y":20
     },
     {
-      "type":"SpikesBottom",
+      "type":"SpikesTop",
       "pos_x":2000,
       "pos_y":30,
       "size_x":210,
@@ -97,7 +98,7 @@
     },
     {
       "type":"Coin",
-      "pos_x":2778.5,
+      "pos_x":2778,
       "pos_y":130,
       "size_x":55,
       "size_y":55,

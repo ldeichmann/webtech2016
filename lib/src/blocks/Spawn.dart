@@ -2,11 +2,13 @@ part of runner;
 
 class Spawn extends Block {
 
-  Spawn(int id, int pos_x, int pos_y, int size_x, int size_y) : super(id, pos_x, pos_y, size_x, size_y) {
-    this.name = "Spawn";
-    this.canCollide = false;
-    this.isDeadly = false;
-    this.isVisible = false;
+  /// Creates Spawn instance
+  Spawn(int id, int pos_x, int pos_y, int size_x, int size_y, [bool isDeadly, bool canCollide, bool isVisible])
+      : super(id, pos_x, pos_y, size_x, size_y, isDeadly, canCollide, isVisible) {
+    name = "Spawn";
+    this.canCollide = canCollide ?? false;
+    this.isDeadly = isDeadly ?? false;
+    this.isVisible = isVisible ?? false;
   }
 
 }
