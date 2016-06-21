@@ -71,9 +71,9 @@
     {
       "type":"Ground",
       "pos_x":400,
-      "pos_y":30,
+      "pos_y":50,
       "size_x":40,
-      "size_y":200
+      "size_y":180
     },
     {
       "type":"Ground",
@@ -85,9 +85,9 @@
     {
       "type":"Ground",
       "pos_x":800,
-      "pos_y":30,
+      "pos_y":50,
       "size_x":40,
-      "size_y":200
+      "size_y":180
     },
     {
       "type":"Ground",
@@ -99,9 +99,9 @@
     {
       "type":"Ground",
       "pos_x":1500,
-      "pos_y":30,
+      "pos_y":50,
       "size_x":40,
-      "size_y":230
+      "size_y":210
     },
     {
       "type":"Ground",
@@ -113,9 +113,9 @@
     {
       "type":"Ground",
       "pos_x":1900,
-      "pos_y":30,
+      "pos_y":50,
       "size_x":40,
-      "size_y":230
+      "size_y":210
     },
     {
       "type":"Ground",
@@ -127,9 +127,9 @@
     {
       "type":"Ground",
       "pos_x":2500,
-      "pos_y":30,
+      "pos_y":50,
       "size_x":40,
-      "size_y":230
+      "size_y":210
     },
     {
       "type":"Ground",
